@@ -1,12 +1,10 @@
 public class Deck {
-//    Card[] spades = new Card[13];
-//    Card[] clubs = new Card[13];
-//    Card[] hearts = new Card[13];
-//    Card[] diamonds = new Card[13];
+    Card[] spades = new Card[13];
+    Card[] clubs = new Card[13];
+    Card[] diamonds = new Card[13];
+    Card[] hearts = new Card[13];
 
-    Card[] spades, clubs, diamonds, hearts = new Card[13];
-
-    Card[][] cards = new Card[13][4];
+    Card[][] cards = new Card[4][13];
 
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
@@ -52,5 +50,6 @@ public class Deck {
                 System.out.println("Suit: " + c.getSuit() + " Rank: " + c.getRank());
             }
         }
+
     }
 }
