@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class Deck {
     Card[] spades = new Card[13];
     Card[] clubs = new Card[13];
@@ -38,14 +42,24 @@ public class Deck {
             this.diamonds[i] = new Card(Suit.DIAMONDS, Rank.values()[i]);
         }
 
+        // I need to randomise the cards in each stack
         this.cards[0] = this.clubs;
         this.cards[1] = this.diamonds;
         this.cards[2] = this.hearts;
         this.cards[3] = this.spades;
+
+        // each element in this.cards is an array of cards (a suit)
+        for(Card[] suit: this.cards){
+            List<Card> suit_list = Arrays.asList(suit);
+            Collections.shuffle(suit_list);
+        }
     }
 
     void getDeck(){
+        // iterate through each suit of cards; spades, diamonds, etc
         for(Card[] suit: this.cards){
+            System.out.println("\n");
+            // iterate through each card in each suit
             for(Card c: suit){
                 System.out.println("Suit: " + c.getSuit() + " Rank: " + c.getRank());
             }
