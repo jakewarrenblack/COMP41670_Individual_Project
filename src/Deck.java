@@ -7,7 +7,6 @@ public class Deck {
     Card[] clubs = new Card[13];
     Card[] diamonds = new Card[13];
     Card[] hearts = new Card[13];
-
     Card[][] cards = new Card[4][13];
 
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
@@ -19,10 +18,14 @@ public class Deck {
 
         private final Suit suit;
         private final Rank rank;
+        private boolean isFaceDown;
 
-        Card(Suit s, Rank r){
+
+        // oddly (to me), java does not support default params in constructors, so we need to actually provide a value here. I'd like it to be false by default.
+        Card(Suit s, Rank r, boolean fd){
             this.suit = s;
             this.rank = r;
+            this.isFaceDown = fd;
         }
 
         Suit getSuit(){
@@ -32,14 +35,22 @@ public class Deck {
         Rank getRank(){
             return this.rank;
         }
+
+        boolean isFaceDown(){
+            return this.isFaceDown;
+        }
+
+        void setIsFaceDown(boolean isFaceDown){
+            this.isFaceDown = isFaceDown;
+        }
     }
 
     Deck(){
         for(int i=0; i<13; i++){
-            this.clubs[i] = new Card(Suit.CLUBS, Rank.values()[i]);
-            this.spades[i] = new Card(Suit.SPADES, Rank.values()[i]);
-            this.hearts[i] = new Card(Suit.HEARTS, Rank.values()[i]);
-            this.diamonds[i] = new Card(Suit.DIAMONDS, Rank.values()[i]);
+            this.clubs[i] = new Card(Suit.CLUBS, Rank.values()[i], true);
+            this.spades[i] = new Card(Suit.SPADES, Rank.values()[i], true);
+            this.hearts[i] = new Card(Suit.HEARTS, Rank.values()[i], true);
+            this.diamonds[i] = new Card(Suit.DIAMONDS, Rank.values()[i], true);
         }
 
         // I need to randomise the cards in each stack
@@ -61,7 +72,17 @@ public class Deck {
             System.out.println("\n");
             // iterate through each card in each suit
             for(Card c: suit){
-                System.out.println("Suit: " + c.getSuit() + " Rank: " + c.getRank());
+                if(c == suit[suit.length -1]){
+                    c.setIsFaceDown(false);
+                }
+
+                if(c.isFaceDown){
+                    System.out.println("Unknown card");
+                }
+                else{
+                    System.out.println("Suit: " + c.getSuit() + " Rank: " + c.getRank());
+                }
+
             }
         }
 
