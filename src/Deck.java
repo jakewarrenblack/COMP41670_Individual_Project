@@ -1,13 +1,15 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Deck {
+public class
+Deck {
     Card[] spades = new Card[13];
     Card[] clubs = new Card[13];
     Card[] diamonds = new Card[13];
     Card[] hearts = new Card[13];
-    Card[][] cards = new Card[4][13];
+    ArrayList<Card> cards = new ArrayList<>();
 
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
@@ -47,44 +49,52 @@ public class Deck {
 
     Deck(){
         for(int i=0; i<13; i++){
+            // so 13 of each = 52 total cards
             this.clubs[i] = new Card(Suit.CLUBS, Rank.values()[i], true);
             this.spades[i] = new Card(Suit.SPADES, Rank.values()[i], true);
             this.hearts[i] = new Card(Suit.HEARTS, Rank.values()[i], true);
             this.diamonds[i] = new Card(Suit.DIAMONDS, Rank.values()[i], true);
         }
 
-        // I need to randomise the cards in each stack
-        this.cards[0] = this.clubs;
-        this.cards[1] = this.diamonds;
-        this.cards[2] = this.hearts;
-        this.cards[3] = this.spades;
+        // I now want to combine these suits in to 52 total cards
+        ArrayList<Card> all = new ArrayList<Card>(Arrays.asList(this.clubs));
+        all.addAll(Arrays.asList(this.spades));
+        all.addAll(Arrays.asList(this.hearts));
+        all.addAll(Arrays.asList(this.diamonds));
 
-        // each element in this.cards is an array of cards (a suit)
-        for(Card[] suit: this.cards){
-            List<Card> suit_list = Arrays.asList(suit);
-            Collections.shuffle(suit_list);
-        }
+        // From an arraylist back into an array
+        this.cards = all;
+
+        // shuffle the cards
+        List<ArrayList<Card>> card_list = Arrays.asList(this.cards);
+        Collections.shuffle(card_list);
     }
 
     void getDeck(){
         // iterate through each suit of cards; spades, diamonds, etc
-        for(Card[] suit: this.cards){
+        for(Card card: this.cards){
             System.out.println("\n");
             // iterate through each card in each suit
-            for(Card c: suit){
-                if(c == suit[suit.length -1]){
-                    c.setIsFaceDown(false);
-                }
+            System.out.println("Suit: " + card.getSuit() + " Rank: " + card.getRank());
+        }
+    }
 
-                if(c.isFaceDown){
-                    System.out.println("Unknown card");
-                }
-                else{
-                    System.out.println("Suit: " + c.getSuit() + " Rank: " + c.getRank());
-                }
+    // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
+    ArrayList<ArrayList<Card>> deal(){
+        // will be a list containing arrays of cards of varying size, our piles
+        // should be 7 piles, so a list of lists
+        ArrayList<ArrayList<Card>> piles = new ArrayList<>();
 
+
+        for(int i=0; i<7; i++){
+            piles.add(new ArrayList<Card>());
+            // increment up until we've reached the size of i, so we end up with a pile of size 1, 2, up to 7
+            for(int j=0; j<=i; j++){
+                // this nice line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
+                // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
+                piles.get(i).add(this.cards.remove(0)); // Remove cards from overall cards and add to the piles
             }
         }
-
+        return piles;
     }
 }
