@@ -3,5 +3,6 @@ public class Main {
         Deck d = new Deck();
        // d.getDeck();
         d.deal();
+        d.getTableau();
     }
 }

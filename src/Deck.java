@@ -11,6 +11,10 @@ Deck {
     Card[] hearts = new Card[13];
     ArrayList<Card> cards = new ArrayList<>();
 
+    // contains our 7 piles
+
+    ArrayList<ArrayList<Card>> tableau;
+
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
 
@@ -75,6 +79,23 @@ Deck {
         }
     }
 
+    void getTableau(){
+        int idx = 0;
+        for(ArrayList<Card> pile: this.tableau){
+            System.out.println("\nPile " + Integer.toString(idx+1) + ":\n");
+            for(Card c: pile){
+                if(c.isFaceDown){
+                    System.out.println("Unknown card");
+                }
+                else{
+                    System.out.println(c.getRank() + " of " + c.getSuit());
+                }
+
+            }
+            idx++;
+        }
+    }
+
     // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
     ArrayList<ArrayList<Card>> deal(){
         Collections.shuffle(this.cards);
@@ -102,9 +123,8 @@ Deck {
             lastCard.setIsFaceDown(false);
         }
 
+        this.tableau = piles;
 
-        // TODO: I need to shuffle these
-        // TODO: Make the top card in each pile face up
         return piles;
     }
 }
