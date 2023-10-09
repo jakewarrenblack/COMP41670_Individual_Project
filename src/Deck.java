@@ -64,10 +64,6 @@ Deck {
 
         // From an arraylist back into an array
         this.cards = all;
-
-        // shuffle the cards
-        List<ArrayList<Card>> card_list = Arrays.asList(this.cards);
-        Collections.shuffle(card_list);
     }
 
     void getDeck(){
@@ -81,6 +77,8 @@ Deck {
 
     // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
     ArrayList<ArrayList<Card>> deal(){
+        Collections.shuffle(this.cards);
+
         // will be a list containing arrays of cards of varying size, our piles
         // should be 7 piles, so a list of lists
         ArrayList<ArrayList<Card>> piles = new ArrayList<>();
@@ -92,9 +90,21 @@ Deck {
             for(int j=0; j<=i; j++){
                 // this nice line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
                 // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
-                piles.get(i).add(this.cards.remove(0)); // Remove cards from overall cards and add to the piles
+                piles.get(i).add(this.cards.remove(this.cards.size() - 1)); // Remove cards from overall cards and add to the piles
             }
         }
+
+
+        for(ArrayList<Card> pile: piles){
+
+
+            Card lastCard = pile.get(pile.size() -1);
+            lastCard.setIsFaceDown(false);
+        }
+
+
+        // TODO: I need to shuffle these
+        // TODO: Make the top card in each pile face up
         return piles;
     }
 }
