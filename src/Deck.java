@@ -13,7 +13,7 @@ Deck {
 
     // contains our 7 piles
 
-    ArrayList<ArrayList<Card>> tableau;
+    private ArrayList<ArrayList<Card>> tableau;
 
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
@@ -79,7 +79,7 @@ Deck {
         }
     }
 
-    void getTableau(){
+    void printTableau(){
         int idx = 0;
         for(ArrayList<Card> pile: this.tableau){
             System.out.println("\nPile " + Integer.toString(idx+1) + ":\n");
@@ -96,6 +96,10 @@ Deck {
         }
     }
 
+    ArrayList<ArrayList<Card>> getTableau(){
+        return this.tableau;
+    }
+
     // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
     ArrayList<ArrayList<Card>> deal(){
         Collections.shuffle(this.cards);
@@ -109,16 +113,14 @@ Deck {
             piles.add(new ArrayList<Card>());
             // increment up until we've reached the size of i, so we end up with a pile of size 1, 2, up to 7
             for(int j=0; j<=i; j++){
-                // this nice line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
+                // this line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
                 // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
                 piles.get(i).add(this.cards.remove(this.cards.size() - 1)); // Remove cards from overall cards and add to the piles
             }
         }
 
-
+        // the last card in the pile is face up
         for(ArrayList<Card> pile: piles){
-
-
             Card lastCard = pile.get(pile.size() -1);
             lastCard.setIsFaceDown(false);
         }
