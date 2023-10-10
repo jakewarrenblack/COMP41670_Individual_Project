@@ -10,7 +10,7 @@ Deck {
     Pile clubs = new Pile('C', new ArrayList<Card>(13));
     Pile diamonds = new Pile('D', new ArrayList<Card>(13));
     Pile hearts = new Pile('H', new ArrayList<Card>(13));
-    ArrayList<Pile> deck = new ArrayList<>();
+    ArrayList<Card> deck = new ArrayList<>();
 
     private ArrayList<Pile> tableau;
 
@@ -62,30 +62,17 @@ Deck {
         }
 
         // I now want to combine these suits in to 52 total cards
-        ArrayList<Pile> all = new ArrayList<Pile>();
-
-        all.addAll(Arrays.asList(this.spades));
-        all.addAll(Arrays.asList(this.hearts));
-        all.addAll(Arrays.asList(this.diamonds));
-        all.addAll(Arrays.asList(this.clubs));
-
-        // From an arraylist back into an array
-        this.deck = all;
+        this.deck.addAll(this.clubs.getCards());
+        this.deck.addAll(this.spades.getCards());
+        this.deck.addAll(this.hearts.getCards());
+        this.deck.addAll(this.diamonds.getCards());
     }
 
-    void getDeck(){
-        // iterate through each suit of cards; spades, diamonds, etc
-        for(Pile pile: this.deck){
-            for(Card card: pile.getCards()){
-                System.out.println("\n");
-                // iterate through each card in each suit
-                System.out.println("Suit: " + card.getSuit() + " Rank: " + card.getRank());
-            }
-        }
+    ArrayList<Card> getDeck(){
+        return this.deck;
     }
 
     void printTableau(){
-        int idx = 0;
         for(Pile pile: this.tableau){
             System.out.println("\n" + pile.getLabel() + ":\n");
             for(Card c: pile.getCards()){
@@ -97,7 +84,6 @@ Deck {
                 }
 
             }
-            idx++;
         }
     }
 
@@ -106,18 +92,12 @@ Deck {
     }
 
     // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
-    ArrayList<Pile> deal(){
+    void deal(){
         Collections.shuffle(this.deck);
 
         // will be a list containing arrays of cards of varying size, our piles
         // should be 7 piles, so a list of lists
         ArrayList<Pile> piles = new ArrayList<>();
-
-        ArrayList<Card> flattenedDeck = new ArrayList<>();
-
-        for (Pile pile : this.deck) {
-            flattenedDeck.addAll(pile.getCards());
-        }
 
 
         for(int i=0; i<7; i++){
@@ -133,7 +113,7 @@ Deck {
 
                 // this line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
                 // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
-                piles.get(i).addCard(flattenedDeck.remove(flattenedDeck.size() - 1)); // Remove cards from overall cards and add to the piles
+                piles.get(i).addCard(this.deck.remove(this.deck.size() - 1)); // Remove cards from overall cards and add to the piles
 
             }
         }
@@ -145,7 +125,5 @@ Deck {
         }
 
         this.tableau = piles;
-
-        return piles;
     }
 }

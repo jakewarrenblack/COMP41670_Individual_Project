@@ -9,21 +9,21 @@ public class Board extends Deck {
     // it needs to have 4 foundation piles too:
 
     Deck deck;
-    ArrayList<ArrayList<Card>> foundation = new ArrayList<>(4);
+    ArrayList<Pile> foundation = new ArrayList<>(4);
 
 
 
     // these will be empty initially, unless there are aces in our initial tableau, since they should be placed in the foundation piles first anyway
     Board(Deck d){
         this.deck = d;
-        // spades
-        this.foundation.add(0, new ArrayList<>());
-        // clubs
-        this.foundation.add(1, new ArrayList<>());
         // diamonds
-        this.foundation.add(2, new ArrayList<>());
+        this.foundation.add(0, new Pile('D', new ArrayList<>()));
         // hearts
-        this.foundation.add(3, new ArrayList<>());
+        this.foundation.add(1, new Pile('H', new ArrayList<>()));
+        // clubs
+        this.foundation.add(2, new Pile('C', new ArrayList<>()));
+        // spades
+        this.foundation.add(3, new Pile('S', new ArrayList<>()));
 
     }
 
@@ -67,11 +67,11 @@ public class Board extends Deck {
 
     void getFoundation(){
         System.out.println("\nFoundation piles:\n");
-        for(int i=0; i<this.foundation.size(); i++){
-            System.out.println("Pile " + i);
-            for(int j=0; j<this.foundation.get(i).size(); j++){
-                Card currentCard = this.foundation.get(i).get(j);
-                System.out.println(currentCard.getRank() + " of " + currentCard.getSuit());
+
+        for(Pile p: this.foundation){
+            System.out.println(p.getLabel() + "\n");
+            for(Card card: p.getCards()){
+                System.out.println(card.getRank() + " of " + card.getSuit());
             }
         }
     }

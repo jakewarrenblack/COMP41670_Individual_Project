@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
         Deck d = new Deck();
@@ -10,5 +12,8 @@ public class Main {
 
         Board b = new Board(d);
         b.getFoundation();
+
+        ArrayList<Deck.Card> deck = d.getDeck();
+        System.out.println(deck.size() + " cards in the draw pile.");
     }
 }
