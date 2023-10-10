@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -5,15 +6,13 @@ import java.util.List;
 
 public class
 Deck {
-    Card[] spades = new Card[13];
-    Card[] clubs = new Card[13];
-    Card[] diamonds = new Card[13];
-    Card[] hearts = new Card[13];
-    ArrayList<Card> cards = new ArrayList<>();
+    Pile spades = new Pile('S', new ArrayList<Card>(13));
+    Pile clubs = new Pile('C', new ArrayList<Card>(13));
+    Pile diamonds = new Pile('D', new ArrayList<Card>(13));
+    Pile hearts = new Pile('H', new ArrayList<Card>(13));
+    ArrayList<Pile> deck = new ArrayList<>();
 
-    // contains our 7 piles
-
-    private ArrayList<ArrayList<Card>> tableau;
+    private ArrayList<Pile> tableau;
 
     enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
@@ -51,39 +50,45 @@ Deck {
         }
     }
 
+
+
     Deck(){
         for(int i=0; i<13; i++){
             // so 13 of each = 52 total cards
-            this.clubs[i] = new Card(Suit.CLUBS, Rank.values()[i], true);
-            this.spades[i] = new Card(Suit.SPADES, Rank.values()[i], true);
-            this.hearts[i] = new Card(Suit.HEARTS, Rank.values()[i], true);
-            this.diamonds[i] = new Card(Suit.DIAMONDS, Rank.values()[i], true);
+            this.clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
+            this.spades.addCard(new Card(Suit.SPADES, Rank.values()[i], true));
+            this.hearts.addCard(new Card(Suit.HEARTS, Rank.values()[i], true));
+            this.diamonds.addCard(new Card(Suit.DIAMONDS, Rank.values()[i], true));
         }
 
         // I now want to combine these suits in to 52 total cards
-        ArrayList<Card> all = new ArrayList<Card>(Arrays.asList(this.clubs));
+        ArrayList<Pile> all = new ArrayList<Pile>();
+
         all.addAll(Arrays.asList(this.spades));
         all.addAll(Arrays.asList(this.hearts));
         all.addAll(Arrays.asList(this.diamonds));
+        all.addAll(Arrays.asList(this.clubs));
 
         // From an arraylist back into an array
-        this.cards = all;
+        this.deck = all;
     }
 
     void getDeck(){
         // iterate through each suit of cards; spades, diamonds, etc
-        for(Card card: this.cards){
-            System.out.println("\n");
-            // iterate through each card in each suit
-            System.out.println("Suit: " + card.getSuit() + " Rank: " + card.getRank());
+        for(Pile pile: this.deck){
+            for(Card card: pile.getCards()){
+                System.out.println("\n");
+                // iterate through each card in each suit
+                System.out.println("Suit: " + card.getSuit() + " Rank: " + card.getRank());
+            }
         }
     }
 
     void printTableau(){
         int idx = 0;
-        for(ArrayList<Card> pile: this.tableau){
-            System.out.println("\nPile " + Integer.toString(idx+1) + ":\n");
-            for(Card c: pile){
+        for(Pile pile: this.tableau){
+            System.out.println("\n" + pile.getLabel() + ":\n");
+            for(Card c: pile.getCards()){
                 if(c.isFaceDown){
                     System.out.println("Unknown card");
                 }
@@ -96,32 +101,46 @@ Deck {
         }
     }
 
-    ArrayList<ArrayList<Card>> getTableau(){
+    ArrayList<Pile> getTableau(){
         return this.tableau;
     }
 
     // we want to deal out 7 piles, pile 1 has a single card, pile 2 has 2, and so on
-    ArrayList<ArrayList<Card>> deal(){
-        Collections.shuffle(this.cards);
+    ArrayList<Pile> deal(){
+        Collections.shuffle(this.deck);
 
         // will be a list containing arrays of cards of varying size, our piles
         // should be 7 piles, so a list of lists
-        ArrayList<ArrayList<Card>> piles = new ArrayList<>();
+        ArrayList<Pile> piles = new ArrayList<>();
+
+        ArrayList<Card> flattenedDeck = new ArrayList<>();
+
+        for (Pile pile : this.deck) {
+            flattenedDeck.addAll(pile.getCards());
+        }
 
 
         for(int i=0; i<7; i++){
-            piles.add(new ArrayList<Card>());
+            // label the foundation piles 1-7
+            piles.add(new Pile(i+1, new ArrayList<Card>()));
             // increment up until we've reached the size of i, so we end up with a pile of size 1, 2, up to 7
             for(int j=0; j<=i; j++){
+
+                // deck is an ArrayList of Piles
+                // Piles contain ArrayLists of Cards
+                // just want to flatten for now
+
+
                 // this line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
                 // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
-                piles.get(i).add(this.cards.remove(this.cards.size() - 1)); // Remove cards from overall cards and add to the piles
+                piles.get(i).addCard(flattenedDeck.remove(flattenedDeck.size() - 1)); // Remove cards from overall cards and add to the piles
+
             }
         }
 
         // the last card in the pile is face up
-        for(ArrayList<Card> pile: piles){
-            Card lastCard = pile.get(pile.size() -1);
+        for(Pile pile: piles){
+            Card lastCard = pile.getCard(pile.getSize() -1);
             lastCard.setIsFaceDown(false);
         }
 

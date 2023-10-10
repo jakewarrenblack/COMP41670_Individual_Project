@@ -7,36 +7,60 @@ public class Board extends Deck {
     // inherits the tableau (the 7 piles)
 
     // it needs to have 4 foundation piles too:
+
+    Deck deck;
     ArrayList<ArrayList<Card>> foundation = new ArrayList<>(4);
 
+
+
     // these will be empty initially, unless there are aces in our initial tableau, since they should be placed in the foundation piles first anyway
-    Board(Deck deck){
+    Board(Deck d){
+        this.deck = d;
+        // spades
         this.foundation.add(0, new ArrayList<>());
+        // clubs
         this.foundation.add(1, new ArrayList<>());
+        // diamonds
         this.foundation.add(2, new ArrayList<>());
+        // hearts
         this.foundation.add(3, new ArrayList<>());
 
-        // set up the foundation piles
-        for(ArrayList<Card> pile: deck.getTableau()){
-            Card topCard = pile.get(pile.size() - 1);
+    }
 
-            // if there's a face-up ace in the tableau, add it to the foundation piles
-            if(!topCard.isFaceDown() && topCard.getRank() == Rank.ACE){
-                // add this card to whichever foundation pile has the least number of cards in it (so ascending order)
-                int[] sizes = new int[4];
-                for(int i=0; i<foundation.size(); i++){
-                    sizes[i] = foundation.get(i).size();
-                }
+    /*
+    *  The game begins with 7 piles of cards (the tableau)
+    *  Above that are 4 empty piles (the foundation piles)
+    *  Straight away, if there are any ACE cards facing up in our tableau, they can be added to the foundation piles
+    *  When a card is removed from the tableau, the one below it is flipped to face upwards. If THAT card is ALSO an ace, that can go straight to the foundation pile.
+    *  Hence, the recursion.
+    */
+//    void handleTopCard(Deck deck, Card topCard){
+//        // if there's a face-up ACE in the tableau, add it to the foundation piles
+//        if(!topCard.isFaceDown() && topCard.getRank() == Rank.ACE){
+//           // spades, clubs, diamonds, hearts (0,1,2,3)
+//            switch(topCard.getSuit()){
+//                case SPADES -> foundation.get(0).add(topCard);
+//                case CLUBS -> foundation.get(1).add(topCard);
+//                case DIAMONDS -> foundation.get(2).add(topCard);
+//                case HEARTS -> foundation.get(3).add(topCard);
+//            }
+//
+//            // this returns the card below the one we removed
+//            Card nextCard = this.deck.getTableau().removeCard(topCard);
+//        }
+//    }
 
-                int smallest = sizes[0];
-                for(int i = 1; i < sizes.length; i++){
-                    if(sizes[i] < smallest){
-                        smallest = sizes[i];
-                    }
-                }
+    void moveCard(Card card){
+        // we've added an ace to our foundation pile, now we need to remove it from the tableau...
+        for(Pile tableauPile: this.deck.getTableau()){
+            Card tableauPileTopCard = tableauPile.getCard(tableauPile.getSize()-1);
 
-                ArrayList<Card> pileToAddTo = foundation.get(smallest);
-                pileToAddTo.add(topCard);
+            // this is the card we just added to our foundation piles. we want to drop it from the tableau.
+            if(tableauPileTopCard == card){
+                tableauPile.removeCard(card);
+                // then flip the card below it
+                Card nextCard = tableauPile.getCard(tableauPile.indexOf(tableauPileTopCard)-1);
+                nextCard.setIsFaceDown(false);
             }
         }
     }
