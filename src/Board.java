@@ -1,21 +1,24 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Set;
 
 public class Board extends Deck {
-    // want this to have the attributes of the deck, and a bit more
-    // should also inherit the deck itself (for the remaining 23 cards)
-    // inherits the tableau (the 7 piles)
-
-    // it needs to have 4 foundation piles too:
-
-    Deck deck;
+    Pile deck;
+    ArrayList<Pile> lanes;
     ArrayList<Pile> foundation = new ArrayList<>(4);
 
-
+    // wrapper class needed here, this doesn't support `char`
+    // the set allows us to use the concise .contains method, which is why I've opted for it
+    private static final Set<Character> VALID_MOVES = Set.of('1', '2', '3', '4', '5', '6', '7', 'D', 'H', 'C', 'S', 'P');
 
     // these will be empty initially, unless there are aces in our initial tableau, since they should be placed in the foundation piles first anyway
-    Board(Deck d){
-        this.deck = d;
+    Board(Deck d, ArrayList<Pile> lanes){
+        // The remaining cards after dealing out the cards for the lanes (24 of them).
+        this.deck = d.getDeck();
+        this.lanes = lanes;
+
+        System.out.println("\n" + this.deck.getSize() + " cards in the draw pile (P).");
+
         // diamonds
         this.foundation.add(0, new Pile('D', new ArrayList<>()));
         // hearts
@@ -24,45 +27,56 @@ public class Board extends Deck {
         this.foundation.add(2, new Pile('C', new ArrayList<>()));
         // spades
         this.foundation.add(3, new Pile('S', new ArrayList<>()));
-
     }
 
-    /*
-    *  The game begins with 7 piles of cards (the tableau)
-    *  Above that are 4 empty piles (the foundation piles)
-    *  Straight away, if there are any ACE cards facing up in our tableau, they can be added to the foundation piles
-    *  When a card is removed from the tableau, the one below it is flipped to face upwards. If THAT card is ALSO an ace, that can go straight to the foundation pile.
-    *  Hence, the recursion.
-    */
-//    void handleTopCard(Deck deck, Card topCard){
-//        // if there's a face-up ACE in the tableau, add it to the foundation piles
-//        if(!topCard.isFaceDown() && topCard.getRank() == Rank.ACE){
-//           // spades, clubs, diamonds, hearts (0,1,2,3)
-//            switch(topCard.getSuit()){
-//                case SPADES -> foundation.get(0).add(topCard);
-//                case CLUBS -> foundation.get(1).add(topCard);
-//                case DIAMONDS -> foundation.get(2).add(topCard);
-//                case HEARTS -> foundation.get(3).add(topCard);
-//            }
-//
-//            // this returns the card below the one we removed
-//            Card nextCard = this.deck.getTableau().removeCard(topCard);
-//        }
-//    }
+    boolean validateMove(char startPosition, char endPosition){
+        // Immediately make sure that both chars actually relate to one of our card piles
+        return VALID_MOVES.contains(startPosition) && VALID_MOVES.contains(endPosition);
+    }
 
-    void moveCard(Card card){
-        // we've added an ace to our foundation pile, now we need to remove it from the tableau...
-        for(Pile tableauPile: this.deck.getTableau()){
-            Card tableauPileTopCard = tableauPile.getCard(tableauPile.getSize()-1);
-
-            // this is the card we just added to our foundation piles. we want to drop it from the tableau.
-            if(tableauPileTopCard == card){
-                tableauPile.removeCard(card);
-                // then flip the card below it
-                Card nextCard = tableauPile.getCard(tableauPile.indexOf(tableauPileTopCard)-1);
-                nextCard.setIsFaceDown(false);
+    Pile findPile(char label){
+        if(label == 'P'){
+            // it's the remaining card pile, then
+            return this.deck;
+        }
+        else {
+            int n = Character.getNumericValue(label);
+            if(n > 0 && n < 10){
+                // in this case, the label corresponds with one of the lane labels
+                return this.lanes.get(n);
+            }
+            else{
+                Pile returnPile = null;
+                // finally, it's a foundation / 4 suit card then
+                switch(label){
+                    case('D') -> returnPile = this.foundation.get(0);
+                    case('H') -> returnPile = this.foundation.get(1);
+                    case('C') -> returnPile = this.foundation.get(2);
+                    case('S') -> returnPile = this.foundation.get(3);
+                }
+                return returnPile;
             }
         }
+        
+    }
+
+    void moveCard(char startPosition, char endPosition){
+        // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
+
+        if(!validateMove(startPosition, endPosition)){
+            System.out.println("Illegal move!");
+            return;
+        }
+
+        Pile startPile = findPile(startPosition);
+        Card c = startPile.getCard(startPile.getSize()-1); // always using the card on top of the pile
+        Pile endPile = findPile(endPosition);
+
+        // startPile.remove(c)
+        // endPile.add(c)
+
+        //Card nextCard = tableauPile.getCard(tableauPile.indexOf(tableauPileTopCard) - 1);
+        //nextCard.setIsFaceDown(false);
     }
 
     void getFoundation(){
