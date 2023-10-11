@@ -12,18 +12,17 @@ public class Main {
 
         Deck.Card[] drawnCards = new Deck.Card[3];
 
+        enum GameState {ACTIVE, QUIT, WON}
+
+        GameState gameState = GameState.ACTIVE;
+
 
         printAll(deck, board);
 
-        while(true){
+        while(gameState == GameState.ACTIVE){
             System.out.println("Make a move:");
-            char[] move = s.nextLine().toCharArray();
+            char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean legalMove = false;
-
-            // keep track of the last index we replaced
-            // e.g. if we replaced index 0 last time because it already had a value,
-            // then replace index 1 this time, then index 2, then start again from 0
-            int lastIndexReplaced = -1;
 
             // TODO: It can also be 3, if the user provides a number of cards to move
             if(move.length == 2){
@@ -40,6 +39,10 @@ public class Main {
                             System.out.println(c.getRank() + " of " + c.getSuit());
                         }
                     }
+                }
+                else if(move.length == 1 && move[0] == 'Q'){
+                    System.out.println("Goodbye");
+                    gameState = GameState.QUIT;
                 }
                 else{
                     System.out.println("Illegal move! That move is invalid.");
