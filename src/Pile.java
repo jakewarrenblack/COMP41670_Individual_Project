@@ -31,6 +31,11 @@ public class Pile{
     Deck.Card getCard(int i){
         return this.cards.get(i);
     }
+
+    // Returns the element which was removed from the list
+    Deck.Card removeCard(int i){
+        return this.cards.remove(i);
+    }
     
     int getSize(){
         return this.cards.size();

@@ -2,9 +2,11 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Board extends Deck {
-    Pile deck;
-    ArrayList<Pile> lanes;
-    ArrayList<Pile> foundation = new ArrayList<>(4);
+    private final Pile deck;
+    private final ArrayList<Pile> lanes;
+    private final ArrayList<Pile> foundation = new ArrayList<>(4);
+
+    private Card[] drawnFromDeck = new Card[3];
 
     // wrapper class needed here, this doesn't support `char`
     // the set allows us to use the concise .contains method, which is why I've opted for it
@@ -57,6 +59,42 @@ public class Board extends Deck {
             }
         }
         
+    }
+
+    // TODO: Only 3 cards should be visible from the deck at any one time
+    // So you can reveal 3 cards from the top, only those 3 are visible,
+    // then as you draw more cards, they start to replace those ones
+
+    private static int lastAdded;
+
+
+    Card[] drawFromDeck(){
+        final boolean noCardsNull = this.drawnFromDeck[0] != null && this.drawnFromDeck[1] != null && this.drawnFromDeck[2] != null;
+
+        for(int i=0; i<this.drawnFromDeck.length; i++){
+            if(noCardsNull){
+
+                this.drawnFromDeck[lastAdded] = this.deck.removeCard(this.deck.getSize()-1);
+
+                if(lastAdded == 2){
+                    lastAdded = 0;
+                }
+                else{
+                    lastAdded++;
+                }
+
+                break;
+            }
+            else{
+                if(this.drawnFromDeck[i] == null){
+                    this.drawnFromDeck[i] = this.deck.removeCard(this.deck.getSize()-1);
+                    lastAdded = i;
+                    break;
+                }
+            }
+        }
+
+    return this.drawnFromDeck;
     }
 
     /*
