@@ -70,7 +70,13 @@ Deck {
         return new Pile('P', this.deck);
     }
 
-    void printTableau(){
+    void printDeck(){
+        for(Card c: this.deck){
+            System.out.println(c.getRank() + " of " + c.getSuit());
+        }
+    }
+
+    void printLanes(){
         for(Pile pile: this.lanes){
             System.out.println("\n" + pile.getLabel() + ":\n");
             for(Card c: pile.getCards()){

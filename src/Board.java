@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class Board extends Deck {
             int n = Character.getNumericValue(label);
             if(n > 0 && n < 10){
                 // in this case, the label corresponds with one of the lane labels
-                return this.lanes.get(n);
+                return this.lanes.get(n-1);
             }
             else{
                 Pile returnPile = null;
@@ -60,26 +59,50 @@ public class Board extends Deck {
         
     }
 
-    void moveCard(char startPosition, char endPosition){
+    /*
+    * Return true if move is legal
+     */
+    boolean moveCard(char startPosition, char endPosition){
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
 
         if(!validateMove(startPosition, endPosition)){
             System.out.println("Illegal move!");
-            return;
+            return false;
         }
 
         Pile startPile = findPile(startPosition);
-        Card c = startPile.getCard(startPile.getSize()-1); // always using the card on top of the pile
+        Card thisCard = null;
+
+        // if no card present at this index (i.e, there's no cards in the pile, that's illegal)
+        if((startPile.getSize()-1) >= 0){
+            thisCard = startPile.getCard(startPile.getSize()-1); // always using the card on top of the pile
+        }
+        else{
+            System.out.println("Illegal move! No cards in pile " + startPosition);
+            return false;
+        }
+
+        // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck.
+        if(startPile.indexOf(thisCard) != 0){
+            startPile.getCard(startPile.getSize()-2).setIsFaceDown(false); // flip the next card
+        }
+
         Pile endPile = findPile(endPosition);
 
-        // startPile.remove(c)
-        // endPile.add(c)
+        startPile.removeCard(thisCard);
+        endPile.addCard(thisCard);
 
-        //Card nextCard = tableauPile.getCard(tableauPile.indexOf(tableauPileTopCard) - 1);
-        //nextCard.setIsFaceDown(false);
+        // System.out.println(startPile.getCards());
+       // System.out.println(endPile.getCards());
+
+        return true;
     }
 
-    void getFoundation(){
+    ArrayList<Pile> getFoundation(){
+        return this.foundation;
+    }
+
+    void printFoundation(){
         System.out.println("\nFoundation piles:\n");
 
         for(Pile p: this.foundation){
