@@ -137,7 +137,9 @@ public class Pile{
 
 
                         if(previousCardColor == color){
-                            System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + color + " card!");
+                            // Display the opposite colour to the one used as the appropriate value
+                            String s = Objects.equals(color.toString(), "RED") ? "BLACK" : "RED";
+                            System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + s + " card!");
                             return false;
                         }
 
