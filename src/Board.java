@@ -22,8 +22,7 @@ public class Board extends Deck {
         this.deck = d.getDeck();
         this.lanes = lanes;
 
-        System.out.println("\n" + this.deck.getSize() + " cards in the draw pile (P).");
-
+        System.out.println("☆*:.｡.  Cards have been dealt! There are " + this.deck.getSize() + " cards left over in the draw pile (P)   .｡.:*☆");
         // diamonds
         this.foundation.add(0, new Pile('D', new ArrayList<>()));
         // hearts
@@ -123,9 +122,8 @@ public class Board extends Deck {
         // a copy of the destination pile, to test the player's move, without actually making it
         Pile tempPile = new Pile(endPile);
 
-        // FIXME: A lot of these predicate functions should throw errors, and be called from a try/catch block
+
         if(!endPile.validateOrder(thisCard, tempPile)){
-            System.out.println("Invalid move!");
             return false;
         }
         // move is legal, go ahead with flipping previous card, and adding card to pile
@@ -150,9 +148,9 @@ public class Board extends Deck {
         System.out.println("\nFoundation piles:\n");
 
         for(Pile p: this.foundation){
-            System.out.println(p.getLabel() + "\n");
+            System.out.println(p.getLabel() + ":");
             for(Card card: p.getCards()){
-                System.out.print(card.getRank() + " of " + card.getSuit() + ", ");
+                System.out.print(card.getRank() + " of " + card.getSuit() + " " + card.getIcon() + ", ");
             }
         }
     }

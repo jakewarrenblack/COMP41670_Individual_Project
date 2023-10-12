@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class
 Deck {
@@ -22,7 +23,6 @@ Deck {
         private final Rank rank;
         private boolean isFaceDown;
 
-
         // oddly (to me), java does not support default params in constructors, so we need to actually provide a value here. I'd like it to be false by default.
         Card(Suit s, Rank r, boolean fd){
             this.suit = s;
@@ -44,6 +44,20 @@ Deck {
 
         void setIsFaceDown(boolean isFaceDown){
             this.isFaceDown = isFaceDown;
+        }
+
+        String getIcon(){
+            String icon = null;
+
+
+            switch(this.suit){
+                case SPADES -> icon = "♠\uFE0F";
+                case HEARTS -> icon = "♥\uFE0F";
+                case CLUBS -> icon = "♣\uFE0F";
+                case DIAMONDS -> icon = "♦\uFE0F";
+            }
+
+            return icon;
         }
     }
 
@@ -76,6 +90,8 @@ Deck {
         }
     }
 
+
+
     void printLanes(){
         for(Pile pile: this.lanes){
             System.out.println("\n" + pile.getLabel() + ":");
@@ -83,8 +99,9 @@ Deck {
                 if(c.isFaceDown){
                     continue;
                 }
-                System.out.println(c.getRank() + " of " + c.getSuit() + ", ");
+                System.out.print(c.getRank() + " of " + c.getSuit() + " " + c.getIcon() + ", ");
             }
+            System.out.println();
         }
     }
 

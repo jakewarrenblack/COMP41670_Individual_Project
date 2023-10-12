@@ -161,6 +161,8 @@ public class Pile{
 
             // TODO: also, don't think this is an actual rule of patience/solitaire, but in our case, the foundation lanes are labelled D, H, C, S so make sure the suit corresponds to these (IF we're placing in the foundations)
         }
+
+        System.out.println("Invalid move!");
         return false;
     }
 }
