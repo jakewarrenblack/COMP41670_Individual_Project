@@ -20,7 +20,7 @@ public class Main {
         printAll(deck, board);
 
         while(gameState == GameState.ACTIVE){
-            System.out.println("Make a move:");
+            System.out.println("\n\nMake a move:");
             char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean legalMove = false;
 
@@ -31,12 +31,12 @@ public class Main {
             else{
                 // if only 1 character was provided as input, instead of 2 or 3,
                 // the only valid possible move available is 'D', to draw a card from the deck
-                if(move[0] == 'D'){
+                if( move[0] == 'D'){
                     drawnCards = board.drawFromDeck();
                     System.out.println("Drawn cards:\n");
                     for(Deck.Card c: drawnCards){
                         if(c != null){
-                            System.out.println(c.getRank() + " of " + c.getSuit());
+                           System.out.print(c.getRank() + " of " + c.getSuit() + ", ");
                         }
                     }
                 }

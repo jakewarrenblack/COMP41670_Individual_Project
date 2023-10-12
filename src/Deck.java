@@ -78,14 +78,12 @@ Deck {
 
     void printLanes(){
         for(Pile pile: this.lanes){
-            System.out.println("\n" + pile.getLabel() + ":\n");
+            System.out.println("\n" + pile.getLabel() + ":");
             for(Card c: pile.getCards()){
                 if(c.isFaceDown){
-                    System.out.println("Unknown card");
+                    continue;
                 }
-                else{
-                    System.out.println(c.getRank() + " of " + c.getSuit());
-                }
+                System.out.println(c.getRank() + " of " + c.getSuit() + ", ");
             }
         }
     }

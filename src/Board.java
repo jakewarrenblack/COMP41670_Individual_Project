@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class Board extends Deck {
@@ -33,7 +34,20 @@ public class Board extends Deck {
     boolean validateMove(char startPosition, char endPosition){
         // Immediately make sure that both chars actually relate to one of our card piles
         return VALID_MOVES.contains(startPosition) && VALID_MOVES.contains(endPosition);
+
+        // cards in tableau / lanes must be in order
+        // cards in foundation piles must be in order A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K
+        // needs to alternate red / black
+        // cant have more than 13 cards in a pile
     }
+
+    // get the rank of the card
+    // find that rank in the order array
+    // if there's a card preceding the card you're trying to place, check if A followed by B is valid
+    // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
+    // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
+
+
 
     Pile findPile(char label){
         if(label == 'P'){
@@ -60,14 +74,10 @@ public class Board extends Deck {
         }
         
     }
-
-    // TODO: Only 3 cards should be visible from the deck at any one time
-    // So you can reveal 3 cards from the top, only those 3 are visible,
-    // then as you draw more cards, they start to replace those ones
-
     private static int lastAdded;
 
 
+    // FIXME: Bug? Seems to replace 3rd, then 1st, then eventually 2nd, after a few attempts
     Card[] drawFromDeck(){
         final boolean noCardsNull = this.drawnFromDeck[0] != null && this.drawnFromDeck[1] != null && this.drawnFromDeck[2] != null;
 
@@ -100,6 +110,9 @@ public class Board extends Deck {
     /*
     * Return true if move is legal
      */
+    // FIXME: Overcomplicating validation? Pass two destinations,
+    // figure out the cards at those places,
+    // see if they're compatible?
     boolean moveCard(char startPosition, char endPosition){
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
 
@@ -109,6 +122,7 @@ public class Board extends Deck {
         }
 
         Pile startPile = findPile(startPosition);
+        Pile endPile = findPile(endPosition);
         Card thisCard = null;
 
         // if no card present at this index (i.e, there's no cards in the pile, that's illegal)
@@ -120,18 +134,25 @@ public class Board extends Deck {
             return false;
         }
 
+
+        // a copy of the destination pile, to test the player's move, without actually making it
+        Pile tempPile = new Pile(endPile);
+
+        // FIXME: A lot of these predicate functions should throw errors, and be called from a try/catch block
+        if(!endPile.validateOrder(thisCard, tempPile)){
+            System.out.println("Invalid move!");
+            return false;
+        }
+        // move is legal, go ahead with flipping previous card, and adding card to pile
+
+
         // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck.
         if(startPile.indexOf(thisCard) != 0){
             startPile.getCard(startPile.getSize()-2).setIsFaceDown(false); // flip the next card
         }
 
-        Pile endPile = findPile(endPosition);
-
         startPile.removeCard(thisCard);
         endPile.addCard(thisCard);
-
-        // System.out.println(startPile.getCards());
-       // System.out.println(endPile.getCards());
 
         return true;
     }
@@ -146,7 +167,7 @@ public class Board extends Deck {
         for(Pile p: this.foundation){
             System.out.println(p.getLabel() + "\n");
             for(Card card: p.getCards()){
-                System.out.println(card.getRank() + " of " + card.getSuit());
+                System.out.print(card.getRank() + " of " + card.getSuit() + ", ");
             }
         }
     }
