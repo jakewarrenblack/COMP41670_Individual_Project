@@ -10,7 +10,7 @@ public class Main {
         ArrayList<Pile> lanes = deck.getLanes();
         Board board = new Board(deck, lanes);
 
-        Deck.Card[] drawnCards = new Deck.Card[3];
+        Pile drawnCards;
 
         enum GameState {ACTIVE, QUIT, WON}
 
@@ -34,7 +34,7 @@ public class Main {
                 if( move[0] == 'D'){
                     drawnCards = board.drawFromDeck();
                     System.out.println("Drawn cards:\n");
-                    for(Deck.Card c: drawnCards){
+                    for(Deck.Card c: drawnCards.getCards()){
                         if(c != null){
                            System.out.print(c.getRank() + " of " + c.getSuit() + ", ");
                         }

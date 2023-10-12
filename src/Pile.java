@@ -30,8 +30,22 @@ public class Pile{
         this.cards.add(c);
     }
 
+    void addCard(int i, Deck.Card c){
+        this.cards.add(i, c);
+    }
+
     Deck.Card getCard(int i){
-        return this.cards.get(i);
+        try{
+            return this.cards.get(i);
+        }
+        catch(Exception ex){
+            return null;
+        }
+
+    }
+
+    boolean isEmpty(){
+        return this.cards.isEmpty();
     }
 
     // Returns the element which was removed from the list
@@ -61,10 +75,6 @@ public class Pile{
         this.cards.addAll(another.cards);
     }
 
-    private char getFirstCharFromSuit(Deck.Suit s){
-        return s.toString().charAt(0);
-    }
-
     String[] redSuits = {"HEARTS", "DIAMONDS"};
     String[] blackSuits = {"SPADES", "CLUBS"};
     private final String[] laneOrder = {"KING", "QUEEN", "JACK", "TEN", "NINE", "EIGHT", "SEVEN", "SIX", "FIVE", "FOUR", "THREE", "TWO", "ACE"};
@@ -74,10 +84,23 @@ public class Pile{
     private final Character[] laneLabels = {'1', '2', '3', '4', '5', '6', '7'};
 
     // Check if the pile would be valid with this card added to it
+    // if there's a card preceding the card you're trying to place, check if A followed by B is valid
+    // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
+    // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
     boolean validateOrder(Deck.Card card, Pile destinationPile){
         String[] relevantOrder = Arrays.asList(foundationLabels).contains(destinationPile.label) ? foundationOrder : laneOrder;
 
         Deck.Rank rank = card.getRank();
+
+        enum Color {RED, BLACK};
+        Color color;
+
+        if(Arrays.asList(redSuits).contains(card.getSuit().toString())){
+            color = Color.RED;
+        }
+        else{
+            color = Color.BLACK;
+        }
 
         destinationPile.addCard(card);
         int cardIndex = destinationPile.indexOf(card);
@@ -89,13 +112,35 @@ public class Pile{
             for(int i=0; i<relevantOrder.length-1; i++){
                 // we expect the card after this one to be the same rank as our relevant card
                 // if it isn't, this move is invalid
-                if(relevantOrder[i] == precedingCard.getRank().toString()){
-                    if(relevantOrder[i+1] != rank.toString()){
+                if(Objects.equals(relevantOrder[i], precedingCard.getRank().toString())){
+                    if(!Objects.equals(relevantOrder[i + 1], rank.toString())){
                         System.out.println("Invalid move! Card of rank: " + relevantOrder[i] + " may not be followed by " + rank);
                         return false;
                     }
                     else{
                         // means the combination of (card before our card) + (our card) is valid for our destination pile.
+
+                        // now need to check the colour combination
+                        // a red card should be followed by a black card, and vice-versa
+
+                        Color previousCardColor;
+
+                        Deck.Suit previousSuit = precedingCard.getSuit();
+
+                        // if this is true, previous card is red. otherwise, it's black.
+                        if(Arrays.asList(redSuits).contains(previousSuit.toString())){
+                            previousCardColor = Color.RED;
+                        }
+                        else{
+                            previousCardColor = Color.BLACK;
+                        }
+
+
+                        if(previousCardColor == color){
+                            System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + color + " card!");
+                            return false;
+                        }
+
                         return true;
                     }
                 }

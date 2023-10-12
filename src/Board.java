@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class Board extends Deck {
@@ -7,7 +8,9 @@ public class Board extends Deck {
     private final ArrayList<Pile> lanes;
     private final ArrayList<Pile> foundation = new ArrayList<>(4);
 
-    private Card[] drawnFromDeck = new Card[3];
+   // private Card[] drawnFromDeck = new Card[3];
+
+    private final Pile drawnFromDeck = new Pile('P', new ArrayList<>(3));
 
     // wrapper class needed here, this doesn't support `char`
     // the set allows us to use the concise .contains method, which is why I've opted for it
@@ -34,25 +37,14 @@ public class Board extends Deck {
     boolean validateMove(char startPosition, char endPosition){
         // Immediately make sure that both chars actually relate to one of our card piles
         return VALID_MOVES.contains(startPosition) && VALID_MOVES.contains(endPosition);
-
-        // cards in tableau / lanes must be in order
-        // cards in foundation piles must be in order A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K
-        // needs to alternate red / black
-        // cant have more than 13 cards in a pile
     }
-
-    // get the rank of the card
-    // find that rank in the order array
-    // if there's a card preceding the card you're trying to place, check if A followed by B is valid
-    // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
-    // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
-
 
 
     Pile findPile(char label){
         if(label == 'P'){
             // it's the remaining card pile, then
-            return this.deck;
+            //return new Pile('P', new ArrayList<>(List.of(this.drawnFromDeck)));
+            return this.drawnFromDeck;
         }
         else {
             int n = Character.getNumericValue(label);
@@ -74,33 +66,29 @@ public class Board extends Deck {
         }
         
     }
-    private static int lastAdded;
+    private static int lastIndexReplaced = 0;
 
+    // Draw cards from the leftover deck and replace them cyclically
+    // Max of 3 drawn at one time
+    // so, draw 1..2..3, then replace 1..2..3
+    Pile drawFromDeck(){
+        if(this.deck.getSize() == 0){
+            System.out.println("Deck is empty!");
+            return new Pile('P', new ArrayList<>());
+        }
 
-    // FIXME: Bug? Seems to replace 3rd, then 1st, then eventually 2nd, after a few attempts
-    Card[] drawFromDeck(){
-        final boolean noCardsNull = this.drawnFromDeck[0] != null && this.drawnFromDeck[1] != null && this.drawnFromDeck[2] != null;
+        if(this.drawnFromDeck.getSize() != 3){
+            this.drawnFromDeck.addCard(this.drawnFromDeck.getSize(), this.deck.removeCard(this.deck.getSize()-1));
+        }
+        else{
+            this.drawnFromDeck.removeCard(lastIndexReplaced);
+            this.drawnFromDeck.addCard(lastIndexReplaced, this.deck.removeCard(this.deck.getSize()-1));
 
-        for(int i=0; i<this.drawnFromDeck.length; i++){
-            if(noCardsNull){
-
-                this.drawnFromDeck[lastAdded] = this.deck.removeCard(this.deck.getSize()-1);
-
-                if(lastAdded == 2){
-                    lastAdded = 0;
-                }
-                else{
-                    lastAdded++;
-                }
-
-                break;
+            if(lastIndexReplaced == 2){
+                lastIndexReplaced = 0;
             }
             else{
-                if(this.drawnFromDeck[i] == null){
-                    this.drawnFromDeck[i] = this.deck.removeCard(this.deck.getSize()-1);
-                    lastAdded = i;
-                    break;
-                }
+                lastIndexReplaced++;
             }
         }
 
@@ -110,9 +98,6 @@ public class Board extends Deck {
     /*
     * Return true if move is legal
      */
-    // FIXME: Overcomplicating validation? Pass two destinations,
-    // figure out the cards at those places,
-    // see if they're compatible?
     boolean moveCard(char startPosition, char endPosition){
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
 
