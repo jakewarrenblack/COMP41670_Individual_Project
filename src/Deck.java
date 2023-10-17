@@ -49,7 +49,6 @@ Deck {
         String getIcon(){
             String icon = null;
 
-
             switch(this.suit){
                 case SPADES -> icon = "♠\uFE0F";
                 case HEARTS -> icon = "♥\uFE0F";

@@ -32,7 +32,7 @@ public class Main {
 
             if (move.length == 2) {
 
-                if(move[0] == 'P' && move[1] == 'D'){
+                if(move[0] == 'P' && move[1] == 'R'){
                     printAll(deck, board);
                 }
                 else{

@@ -27,20 +27,68 @@ public class Pile {
         return c;
     }
 
-    void addCard(Deck.Card c) {
-        this.cards.add(c);
+    // In some cases, we want to enforce a specific suit for a pile
+    // i.e, in our foundation piles
+    Deck.Suit getRequiredSuit(Deck.Suit s){
+        // If the label is not D/H/C/S, it's one of the lanes
+        // so in that case, just allow the card to be added, as there's no specific suit requirement
+        Deck.Suit requiredSuit = s;
+
+        switch(this.label){
+            case 'D' -> requiredSuit = Deck.Suit.DIAMONDS;
+            case 'H' -> requiredSuit = Deck.Suit.HEARTS;
+            case 'C' -> requiredSuit = Deck.Suit.CLUBS;
+            case 'S' -> requiredSuit = Deck.Suit.SPADES;
+        }
+        return requiredSuit;
     }
 
-    void addMultiple(ArrayList<Deck.Card> cards) {
-        this.cards.addAll(cards);
+    boolean addCard(Deck.Card c) {
+        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+
+        if(c.getSuit() == requiredSuit){
+            this.cards.add(c);
+        }
+        else{
+            printIllegalSuit(requiredSuit.toString());
+            return false;
+        }
+        return true;
+    }
+
+    boolean addCard(int i, Deck.Card c) {
+        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+
+        if(c.getSuit() == requiredSuit){
+            this.cards.add(i, c);
+        }
+        else{
+            printIllegalSuit(requiredSuit.toString());
+            return false;
+        }
+        return true;
+    }
+
+    void printIllegalSuit(String requiredSuit){
+        System.out.println("Illegal move! Foundation pile " + this.label + " must begin with a card of suit " + requiredSuit + "!");
+    }
+
+
+    boolean addMultiple(ArrayList<Deck.Card> cards) {
+        Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
+
+        if(cards.get(0).getSuit() == requiredSuit){
+            this.cards.addAll(cards);
+        }
+        else{
+            printIllegalSuit(requiredSuit.toString());
+            return false;
+        }
+        return true;
     }
 
     boolean removeMultiple(ArrayList<Deck.Card> cards) {
         return this.cards.removeAll(cards);
-    }
-
-    void addCard(int i, Deck.Card c) {
-        this.cards.add(i, c);
     }
 
     Deck.Card getCard(int i) {
@@ -49,7 +97,6 @@ public class Pile {
         } catch (Exception ex) {
             return null;
         }
-
     }
 
     boolean isEmpty() {
@@ -110,7 +157,10 @@ public class Pile {
             color = Color.BLACK;
         }
 
-        destinationPile.addCard(card);
+        if(!destinationPile.addCard(card)){
+            return false;
+        }
+
         int cardIndex = destinationPile.indexOf(card);
 
 

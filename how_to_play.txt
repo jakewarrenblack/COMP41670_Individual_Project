@@ -6,7 +6,7 @@
 |                                                                                                                         |  |
 | D = uncover a new card from the draw pile. You can draw up to 3 cards at once from this pile.                           |  |
 |                                                                                                                         |  |
-| PD = print the deck                                                                                                     |  |
+| PR = print the deck                                                                                                     |  |
 |                                                                                                                         |  |
 | To move a single card:                                                                                                  |  |
 | - <Location 1><Location 2> - For example, you might move "65", or "2D"                                                  |  |

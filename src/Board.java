@@ -163,7 +163,11 @@ public class Board extends Deck {
         }
 
         startPile.removeMultiple(theseCards);
-        endPile.addMultiple(theseCards);
+
+
+        if(!endPile.addMultiple(theseCards)){
+            return false;
+        }
 
         return true;
     }
