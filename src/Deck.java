@@ -63,11 +63,17 @@ Deck {
     Deck(){
 
         for(int i=0; i<13; i++){
-            // so 13 of each = 52 total cards
-            this.clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
-            this.spades.addCard(new Card(Suit.SPADES, Rank.values()[i], true));
-            this.hearts.addCard(new Card(Suit.HEARTS, Rank.values()[i], true));
-            this.diamonds.addCard(new Card(Suit.DIAMONDS, Rank.values()[i], true));
+            try {
+                // so 13 of each = 52 total cards
+                this.clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
+                this.spades.addCard(new Card(Suit.SPADES, Rank.values()[i], true));
+                this.hearts.addCard(new Card(Suit.HEARTS, Rank.values()[i], true));
+                this.diamonds.addCard(new Card(Suit.DIAMONDS, Rank.values()[i], true));
+            }
+            catch(IllegalMoveException ex){
+                // This should never happen, since an IllegalMoveException occurs when a user provides input
+                System.out.println(ex);
+            }
         }
 
         // I now want to combine these suits in to 52 total cards
@@ -122,9 +128,15 @@ Deck {
             // increment up until we've reached the size of i, so we end up with a pile of size 1, 2, up to 7
             for(int j=0; j<=i; j++){
 
-                // this line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
-                // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
-                piles.get(i).addCard(this.deck.remove(this.deck.size() - 1)); // Remove cards from overall cards and add to the piles
+                try{
+                    // this line will remove the card object at this index, but also return that object, so we can add to the pile and remove from the cards at the same time
+                    // this means we end up with this.cards having the value '24', all the cards we haven't used to build our piles
+                    piles.get(i).addCard(this.deck.remove(this.deck.size() - 1)); // Remove cards from overall cards and add to the piles
+                }
+                catch(IllegalMoveException ex){
+                    System.out.println(ex);
+                }
+
             }
         }
 

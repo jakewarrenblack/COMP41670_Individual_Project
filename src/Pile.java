@@ -43,48 +43,44 @@ public class Pile {
         return requiredSuit;
     }
 
-    boolean addCard(Deck.Card c) {
+    void addCard(Deck.Card c) throws IllegalMoveException {
         Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
         if(c.getSuit() == requiredSuit){
             this.cards.add(c);
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            throw new IllegalMoveException(getIllegalSuit(requiredSuit.toString()));
         }
-        return true;
+
     }
 
-    boolean addCard(int i, Deck.Card c) {
+    void addCard(int i, Deck.Card c) throws IllegalMoveException {
         Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
         if(c.getSuit() == requiredSuit){
             this.cards.add(i, c);
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            throw new IllegalMoveException(getIllegalSuit(requiredSuit.toString()));
         }
-        return true;
+
     }
 
-    void printIllegalSuit(String requiredSuit){
-        System.out.println("Illegal move! Foundation pile " + this.label + " must begin with a card of suit " + requiredSuit + "!");
+    String getIllegalSuit(String requiredSuit){
+        return "Illegal move! Foundation pile " + this.label + " must begin with a card of suit " + requiredSuit + "!";
     }
 
 
-    boolean addMultiple(ArrayList<Deck.Card> cards) {
+    void addMultiple(ArrayList<Deck.Card> cards) throws IllegalMoveException{
         Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
 
         if(cards.get(0).getSuit() == requiredSuit){
             this.cards.addAll(cards);
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            throw new IllegalMoveException(getIllegalSuit(requiredSuit.toString()));
         }
-        return true;
     }
 
     boolean removeMultiple(ArrayList<Deck.Card> cards) {
@@ -141,7 +137,7 @@ public class Pile {
     // if there's a card preceding the card you're trying to place, check if A followed by B is valid
     // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
     // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
-    boolean validateOrder(Deck.Card card, Pile destinationPile) {
+    void validateOrder(Deck.Card card, Pile destinationPile) throws IllegalMoveException{
         // if only one card was passed, this whole validation process goes ahead as normal
 
         String[] relevantOrder = Arrays.asList(foundationLabels).contains(destinationPile.label) ? foundationOrder : laneOrder;
@@ -157,9 +153,9 @@ public class Pile {
             color = Color.BLACK;
         }
 
-        if(!destinationPile.addCard(card)){
-            return false;
-        }
+        // No need to try/catch - addCard will throw by itself if illegal move
+        destinationPile.addCard(card);
+
 
         int cardIndex = destinationPile.indexOf(card);
 
@@ -172,8 +168,7 @@ public class Pile {
                 // if it isn't, this move is invalid
                 if (Objects.equals(relevantOrder[i], precedingCard.getRank().toString())) {
                     if (!Objects.equals(relevantOrder[i + 1], rank.toString())) {
-                        System.out.println("Invalid move! Card of rank: " + relevantOrder[i] + " may not be followed by " + rank);
-                        return false;
+                        throw new IllegalMoveException("Invalid move! Card of rank: " + relevantOrder[i] + " may not be followed by " + rank);
                     } else {
                         // means the combination of (card before our card) + (our card) is valid for our destination pile.
 
@@ -195,28 +190,18 @@ public class Pile {
                         if (previousCardColor == color) {
                             // Display the opposite colour to the one used as the appropriate value
                             String s = Objects.equals(color.toString(), "RED") ? "BLACK" : "RED";
-                            System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + s + " card!");
-                            return false;
+                            throw new IllegalMoveException("Invalid move! A " + previousCardColor + " card must be followed by a " + s + " card!");
                         }
 
-                        return true;
                     }
                 }
             }
         } else {
             // means there were no cards in the destinationPile, and the card we're trying to place is appropriate for the first card in said pile
             // (an ACE if foundation pile, and a KING if lane pile)
-            if (Objects.equals(rank.toString(), relevantOrder[0])) {
-                return true;
-            } else {
-                System.out.println("Invalid move! First card in this pile must be of rank " + relevantOrder[0]);
-                return false;
+            if (!Objects.equals(rank.toString(), relevantOrder[0])) {
+                throw new IllegalMoveException("Invalid move! First card in this pile must be of rank " + relevantOrder[0]);
             }
-
-            // TODO: also, don't think this is an actual rule of patience/solitaire, but in our case, the foundation lanes are labelled D, H, C, S so make sure the suit corresponds to these (IF we're placing in the foundations)
         }
-
-        System.out.println("Invalid move!");
-        return false;
     }
 }

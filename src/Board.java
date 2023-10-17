@@ -70,7 +70,7 @@ public class Board extends Deck {
     // Draw cards from the leftover deck and replace them cyclically
     // Max of 3 drawn at one time
     // so, draw 1..2..3, then replace 1..2..3
-    Pile drawFromDeck(){
+    Pile drawFromDeck() throws IllegalMoveException {
         if(this.deck.getSize() == 0){
             System.out.println("Deck is empty!");
             return new Pile('P', new ArrayList<>());
@@ -97,7 +97,7 @@ public class Board extends Deck {
     /*
     * Return true if move is legal
      */
-    boolean moveCard(char...move){
+    int moveCard(char...move) throws IllegalMoveException{
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
         char startPosition = move[0];
         char endPosition = move[1];
@@ -112,8 +112,7 @@ public class Board extends Deck {
         }
 
         if(!validateMove(startPosition, endPosition)){
-            System.out.println("Illegal move!");
-            return false;
+            throw new IllegalMoveException("Invalid character!");
         }
 
         Pile startPile = findPile(startPosition);
@@ -134,8 +133,7 @@ public class Board extends Deck {
 
         }
         else{
-            System.out.println("Illegal move! No cards in pile " + startPosition);
-            return false;
+            throw new IllegalMoveException("Illegal move! No cards in pile " + startPosition);
         }
 
 
@@ -148,28 +146,24 @@ public class Board extends Deck {
         }
 
         for(Card c: theseCards){
-            if(!endPile.validateOrder(c, tempPile)){
-                return false;
-            }
+            // Will throw IllegalMoveException if invalid
+            endPile.validateOrder(c, tempPile);
             c.setIsFaceDown(false);
         }
 
         // if we reach this point...move is legal, go ahead with flipping previous card, and adding card to pile
 
 
-        // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck, otherwise we there'd be no 'next' card to flip over
+        // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck, otherwise there's no 'next' card to flip over
         if(startPile.indexOf(theseCards.get(0)) != 0){
             startPile.getCard(startPile.getSize()-(nCards+1)).setIsFaceDown(false); // flip the next card
         }
 
         startPile.removeMultiple(theseCards);
+        endPile.addMultiple(theseCards);
 
 
-        if(!endPile.addMultiple(theseCards)){
-            return false;
-        }
-
-        return true;
+        return 0;
     }
 
     ArrayList<Pile> getFoundation(){

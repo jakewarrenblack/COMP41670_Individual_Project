@@ -16,45 +16,54 @@ public class Main {
         ArrayList<Pile> lanes = deck.getLanes();
         Board board = new Board(deck, lanes);
 
-        Pile drawnCards;
+        Pile drawnCards = null;
 
         enum GameState {ACTIVE, QUIT, WON}
-
         GameState gameState = GameState.ACTIVE;
-
 
         printAll(deck, board);
 
         while (gameState == GameState.ACTIVE) {
             System.out.println("\nMake a move:");
             char[] move = s.nextLine().toUpperCase().toCharArray();
-            boolean legalMove = false;
 
             if (move.length == 2) {
-
                 if(move[0] == 'P' && move[1] == 'R'){
                     printAll(deck, board);
                 }
                 else{
-                    legalMove = board.moveCard(move[0], move[1]);
+                    try{
+                        board.moveCard(move[0], move[1]);
+                    }
+                    catch(IllegalMoveException ex){
+                        System.out.println(ex);
+                    }
                 }
-
-
             } else {
                 // this means the user wants to move multiple cards (provided <label1><label2><n_cards>
                 if(move.length == 3){
-                    legalMove = board.moveCard(move[0], move[1], move[2]);
-                }
+                    try{
+                        board.moveCard(move[0], move[1], move[2]);
+                    }
+                    catch(IllegalMoveException ex){
+                        System.out.println(ex);
+                    }
 
+                }
 
                 if(move[0] == '?'){
                     printTextFile("./how_to_play.txt");
                 }
 
-                // otherwise, if only 1 character was provided as input, instead of 2 or 3,
                 // the only valid possible move available is 'D', to draw a card from the deck
                 if (move[0] == 'D') {
-                    drawnCards = board.drawFromDeck();
+                    try{
+                        drawnCards = board.drawFromDeck();
+                    }
+                    catch(IllegalMoveException ex){
+                        System.out.println(ex);
+                    }
+
                     System.out.println("\nDrawn cards:");
                     for (Deck.Card c : drawnCards.getCards()) {
                         if (c != null) {
@@ -70,10 +79,10 @@ public class Main {
                 }
             }
 
-            if (legalMove) {
-                // Print the board again after making a move
-                printAll(deck, board);
-            }
+
+            // Print the board again after making a move
+            printAll(deck, board);
+
         }
     }
 
