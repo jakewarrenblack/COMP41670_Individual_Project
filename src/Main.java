@@ -32,6 +32,11 @@ public class Main {
             if (move.length == 2) {
                 legalMove = board.moveCard(move[0], move[1]);
             } else {
+                // this means the user wants to move multiple cards (provided <label1><label2><n_cards>
+                if(move.length == 3){
+                    legalMove = board.moveCard(move[0], move[1], move[2]);
+                }
+
                 if(move[0] == '?'){
                     printTextFile("./how_to_play.txt");
                 }

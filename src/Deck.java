@@ -62,6 +62,7 @@ Deck {
     }
 
     Deck(){
+
         for(int i=0; i<13; i++){
             // so 13 of each = 52 total cards
             this.clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
@@ -133,6 +134,21 @@ Deck {
             Card lastCard = pile.getCard(pile.getSize() -1);
             lastCard.setIsFaceDown(false);
         }
+
+        // This provides a specific card setup for testing/demonstrating the movement of multiple cards at once
+        //        ArrayList<Deck.Card> firstCard = new ArrayList<>();
+        //        firstCard.add(new Card(Suit.HEARTS, Rank.TWO, false));
+        //
+        //        ArrayList<Deck.Card> secondCard = new ArrayList<>();
+        //        secondCard.add(new Card(Suit.SPADES, Rank.THREE, false));
+        //
+        //        ArrayList<Deck.Card> thirdCard = new ArrayList<>();
+        //        thirdCard.add(new Card(Suit.DIAMONDS, Rank.FOUR, false));
+        //
+        //        piles.set(0, new Pile(1, firstCard));
+        //        piles.set(1, new Pile(2, secondCard));
+        //        piles.set(2, new Pile(3, thirdCard));
+
 
         this.lanes = piles;
     }

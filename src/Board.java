@@ -97,8 +97,19 @@ public class Board extends Deck {
     /*
     * Return true if move is legal
      */
-    boolean moveCard(char startPosition, char endPosition){
+    boolean moveCard(char...move){
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
+        char startPosition = move[0];
+        char endPosition = move[1];
+        int nCards;
+
+        // try/catch to allow for move[2] index to be nonexistent
+        try{
+            nCards = Character.getNumericValue(move[2]);
+        }
+        catch(IndexOutOfBoundsException e){
+            nCards = 1;
+        }
 
         if(!validateMove(startPosition, endPosition)){
             System.out.println("Illegal move!");
@@ -108,10 +119,19 @@ public class Board extends Deck {
         Pile startPile = findPile(startPosition);
         Pile endPile = findPile(endPosition);
         Card thisCard = null;
+        ArrayList<Card> theseCards = new ArrayList<>();
 
         // if no card present at this index (i.e, there's no cards in the pile, that's illegal)
-        if((startPile.getSize()-1) >= 0){
-            thisCard = startPile.getCard(startPile.getSize()-1); // always using the card on top of the pile
+        // (making sure there are enough cards to accommodate the number of cards the user is trying to move)
+        if((startPile.getSize()-1) >= nCards-1){
+            if(nCards == 1){
+                thisCard = startPile.getCard(startPile.getSize()-1); // always using the card on top of the pile
+            }
+            else{
+                // If user is adding multiple cards, add them all on top of the destination pile
+                theseCards.addAll(startPile.getCards());
+            }
+
         }
         else{
             System.out.println("Illegal move! No cards in pile " + startPosition);
@@ -122,20 +142,28 @@ public class Board extends Deck {
         // a copy of the destination pile, to test the player's move, without actually making it
         Pile tempPile = new Pile(endPile);
 
-
-        if(!endPile.validateOrder(thisCard, tempPile)){
-            return false;
-        }
-        // move is legal, go ahead with flipping previous card, and adding card to pile
-
-
-        // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck.
-        if(startPile.indexOf(thisCard) != 0){
-            startPile.getCard(startPile.getSize()-2).setIsFaceDown(false); // flip the next card
+        // validateOrder accepts an ArrayList of cards, so even if there's only one, I'll wrap it in an arraylist
+        if(theseCards.isEmpty()){
+            theseCards.add(thisCard);
         }
 
-        startPile.removeCard(thisCard);
-        endPile.addCard(thisCard);
+        for(Card c: theseCards){
+            if(!endPile.validateOrder(c, tempPile)){
+                return false;
+            }
+            c.setIsFaceDown(false);
+        }
+
+        // if we reach this point...move is legal, go ahead with flipping previous card, and adding card to pile
+
+
+        // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck, otherwise we there'd be no 'next' card to flip over
+        if(startPile.indexOf(theseCards.get(0)) != 0){
+            startPile.getCard(startPile.getSize()-(nCards+1)).setIsFaceDown(false); // flip the next card
+        }
+
+        startPile.removeMultiple(theseCards);
+        endPile.addMultiple(theseCards);
 
         return true;
     }
