@@ -6,8 +6,13 @@
 |                                                                                                                         |  |
 | D = uncover a new card from the draw pile. You can draw up to 3 cards at once from this pile.                           |  |
 |                                                                                                                         |  |
-| To move a card:                                                                                                         |  |
+| PD = print the deck                                                                                                     |  |
+|                                                                                                                         |  |
+| To move a single card:                                                                                                  |  |
 | - <Location 1><Location 2> - For example, you might move "65", or "2D"                                                  |  |
+|                                                                                                                         |  |
+| To move multiple cards (assuming the move is valid)                                                                     |  |
+| - <Location 1><Location 2><Number of cards> - For example, you could move "122", moving 2 cards from lane 1 to lane 2   |  |
 |                                                                                                                         |  |
 | The position labels are:                                                                                                |  |
 | - Lanes: 1-7                                                                                                            |  |

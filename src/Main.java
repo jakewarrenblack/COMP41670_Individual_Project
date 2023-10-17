@@ -1,5 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -28,14 +30,22 @@ public class Main {
             char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean legalMove = false;
 
-            // TODO: It can also be 3, if the user provides a number of cards to move
             if (move.length == 2) {
-                legalMove = board.moveCard(move[0], move[1]);
+
+                if(move[0] == 'P' && move[1] == 'D'){
+                    printAll(deck, board);
+                }
+                else{
+                    legalMove = board.moveCard(move[0], move[1]);
+                }
+
+
             } else {
                 // this means the user wants to move multiple cards (provided <label1><label2><n_cards>
                 if(move.length == 3){
                     legalMove = board.moveCard(move[0], move[1], move[2]);
                 }
+
 
                 if(move[0] == '?'){
                     printTextFile("./how_to_play.txt");
