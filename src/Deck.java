@@ -1,18 +1,18 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 
 public class
 Deck {
-    Pile spades = new Pile('S', new ArrayList<Card>(13));
-    Pile clubs = new Pile('C', new ArrayList<Card>(13));
-    Pile diamonds = new Pile('D', new ArrayList<Card>(13));
-    Pile hearts = new Pile('H', new ArrayList<Card>(13));
+    Pile spades = new Pile('S', new ArrayList<>(13));
+    Pile clubs = new Pile('C', new ArrayList<>(13));
+    Pile diamonds = new Pile('D', new ArrayList<>(13));
+    Pile hearts = new Pile('H', new ArrayList<>(13));
     ArrayList<Card> deck = new ArrayList<>();
 
     private ArrayList<Pile> lanes;
 
-    enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS};
+    enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS}
+
     enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
 
     public static class Card{
@@ -50,10 +50,10 @@ Deck {
             String icon = null;
 
             switch(this.suit){
-                case SPADES -> icon = "♠\uFE0F";
-                case HEARTS -> icon = "♥\uFE0F";
-                case CLUBS -> icon = "♣\uFE0F";
-                case DIAMONDS -> icon = "♦\uFE0F";
+                case SPADES -> icon = "♠️";
+                case HEARTS -> icon = "♥️";
+                case CLUBS -> icon = "♣️";
+                case DIAMONDS -> icon = "♦️";
             }
 
             return icon;
@@ -118,7 +118,7 @@ Deck {
 
         for(int i=0; i<7; i++){
             // label the foundation piles 1-7
-            piles.add(new Pile(i+1, new ArrayList<Card>()));
+            piles.add(new Pile(i+1, new ArrayList<>()));
             // increment up until we've reached the size of i, so we end up with a pile of size 1, 2, up to 7
             for(int j=0; j<=i; j++){
 

@@ -28,7 +28,7 @@ public class Main {
         while (gameState == GameState.ACTIVE) {
             System.out.println("\nMake a move:");
             char[] move = s.nextLine().toUpperCase().toCharArray();
-            boolean legalMove = false;
+            int legalMove = 0;
 
             if (move.length == 2) {
 
@@ -70,7 +70,7 @@ public class Main {
                 }
             }
 
-            if (legalMove) {
+            if (legalMove == 0) {
                 // Print the board again after making a move
                 printAll(deck, board);
             }
