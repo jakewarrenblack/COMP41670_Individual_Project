@@ -25,9 +25,19 @@
 | Cards in the foundations must be in order:                                                                              |  |
 | - ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING                                          |  |
 |                                                                                                                         |  |
+| The first card in each foundation must also have a suit corresponding to the foundation's label. (E.g H = HEARTS)       |  |
+|                                                                                                                         |  |
+|                                                                                                                         |  |
 | - A black card (spades, clubs) may only be placed above a red card (diamonds, hearts), and vice-versa.                  |  |
 | - The deck of 52 cards has been dealt into 7 piles. Pile 1 contains 1 card, pile 2 contains 2, and so on, up to pile 7. |  |
 | - Only the card on top of each pile is visible at first.                                                                |  |
+|                                                                                                                         |  |
+| Points:                                                                                                                 |  |
+|  - 5 points are awarded for moving cards between lanes. E.g, from lane 1 to lane 2.                                     |  |
+|  - 10 points are awarded for moving from the pile (P) to one of the foundations/suits.                                  |  |
+|  - 20 points are awarded for moving cards from one of the lanes to one of the foundations/suits.                        |  |
+|                                                                                                                         |  |
+|  - Points are awarded only if a specific combination of cards is moved to a pile for the first time.                    |  |
 |                                                                                                                         |  |
 | Your goal is to create 4 piles of 13 cards (52 total) in the 4 foundation piles.                                        |  |
 +-------------------------------------------------------------------------------------------------------------------------+--+

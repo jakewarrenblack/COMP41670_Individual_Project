@@ -80,6 +80,7 @@ public class Main {
                     System.out.println("Goodbye");
                     gameState = GameState.QUIT;
                 } else {
+                    // FIXME: Still prints this when running PR or ?
                     System.out.println("Illegal move! That move is invalid.");
                 }
             }
