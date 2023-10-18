@@ -1,12 +1,11 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 // to represent a pile of cards anywhere on the board, e.g. part of the foundation, the main deck pile, etc
 public class Pile {
     private final char label;
     private final ArrayList<Deck.Card> cards;
+
+    private Set<ArrayList<Deck.Card>> uniqueCardCombinations = new HashSet<>();
 
     Pile(char l, ArrayList<Deck.Card> c) {
         this.label = l;
@@ -138,6 +137,14 @@ public class Pile {
     private final Character[] foundationLabels = {'H', 'C', 'S', 'D'};
     private final Character[] laneLabels = {'1', '2', '3', '4', '5', '6', '7'};
 
+    void addUniqueCardCombination(ArrayList<Deck.Card> cards){
+        this.uniqueCardCombinations.add(cards);
+    }
+
+    Set<ArrayList<Deck.Card>> getUniqueCardCombinations(){
+        return this.uniqueCardCombinations;
+    }
+
     // if there's a card preceding the card you're trying to place, check if A followed by B is valid
     // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
     // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
@@ -212,8 +219,6 @@ public class Pile {
                 System.out.println("Invalid move! First card in this pile must be of rank " + relevantOrder[0]);
                 return false;
             }
-
-            // TODO: also, don't think this is an actual rule of patience/solitaire, but in our case, the foundation lanes are labelled D, H, C, S so make sure the suit corresponds to these (IF we're placing in the foundations)
         }
 
         System.out.println("Invalid move!");

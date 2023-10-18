@@ -135,18 +135,23 @@ Deck {
         }
 
         // This provides a specific card setup for testing/demonstrating the movement of multiple cards at once
-        //        ArrayList<Deck.Card> firstCard = new ArrayList<>();
-        //        firstCard.add(new Card(Suit.HEARTS, Rank.TWO, false));
-        //
-        //        ArrayList<Deck.Card> secondCard = new ArrayList<>();
-        //        secondCard.add(new Card(Suit.SPADES, Rank.THREE, false));
-        //
-        //        ArrayList<Deck.Card> thirdCard = new ArrayList<>();
-        //        thirdCard.add(new Card(Suit.DIAMONDS, Rank.FOUR, false));
-        //
-        //        piles.set(0, new Pile(1, firstCard));
-        //        piles.set(1, new Pile(2, secondCard));
-        //        piles.set(2, new Pile(3, thirdCard));
+                ArrayList<Deck.Card> firstCard = new ArrayList<>();
+                firstCard.add(new Card(Suit.HEARTS, Rank.TWO, false));
+
+                ArrayList<Deck.Card> secondCard = new ArrayList<>();
+                secondCard.add(new Card(Suit.SPADES, Rank.THREE, false));
+
+                ArrayList<Deck.Card> thirdCard = new ArrayList<>();
+                thirdCard.add(new Card(Suit.DIAMONDS, Rank.FOUR, false));
+
+                // testing move multiple cards, then move one card from the top to another pile
+                ArrayList<Deck.Card> fourthCard = new ArrayList<>();
+                fourthCard.add(new Card(Suit.CLUBS, Rank.THREE, false));
+
+                piles.set(0, new Pile(1, firstCard));
+                piles.set(1, new Pile(2, secondCard));
+                piles.set(2, new Pile(3, thirdCard));
+                piles.set(3, new Pile(4, fourthCard));
 
 
         this.lanes = piles;

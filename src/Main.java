@@ -25,25 +25,33 @@ public class Main {
 
         printAll(deck, board);
 
+        int score = 0;
+
         while (gameState == GameState.ACTIVE) {
             System.out.println("\nMake a move:");
             char[] move = s.nextLine().toUpperCase().toCharArray();
-            int legalMove = 0;
+            boolean scoreIncreased = false;
 
             if (move.length == 2) {
-
                 if(move[0] == 'P' && move[1] == 'R'){
                     printAll(deck, board);
                 }
                 else{
-                    legalMove = board.moveCard(move[0], move[1]);
+                    int attempt = board.moveCard(move[0], move[1]);
+                    if(attempt != 0){
+                        score += attempt;
+                        scoreIncreased = true;
+                    }
                 }
-
 
             } else {
                 // this means the user wants to move multiple cards (provided <label1><label2><n_cards>
                 if(move.length == 3){
-                    legalMove = board.moveCard(move[0], move[1], move[2]);
+                    int attempt = board.moveCard(move[0], move[1], move[2]);
+                    if(attempt != 0){
+                        score += attempt;
+                        scoreIncreased = true;
+                    }
                 }
 
 
@@ -70,9 +78,10 @@ public class Main {
                 }
             }
 
-            if (legalMove == 0) {
-                // Print the board again after making a move
+            if(scoreIncreased){
+                // Print the deck again after a valid move, so the player can see their changes
                 printAll(deck, board);
+                System.out.println("\n\nSCORE: " + score);
             }
         }
     }

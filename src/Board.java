@@ -1,13 +1,9 @@
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 public class Board extends Deck {
     private final Pile deck;
     private final ArrayList<Pile> lanes;
     private final ArrayList<Pile> foundation = new ArrayList<>(4);
-
-   // private Card[] drawnFromDeck = new Card[3];
-
     private final Pile drawnFromDeck = new Pile('P', new ArrayList<>(3));
 
     // wrapper class needed here, this doesn't support `char`
@@ -92,6 +88,12 @@ public class Board extends Deck {
     return this.drawnFromDeck;
     }
 
+    // i.e, instead of passing this value around as a HashSet every time, or keeping track in Main.java
+    // this needs to be on a per-Pile basis,
+    private boolean isUniqueCombination(ArrayList<Card> cards, Pile p){
+        return !p.getUniqueCardCombinations().contains(cards);
+    }
+
     /*
     * Return true if move is legal
      */
@@ -100,6 +102,7 @@ public class Board extends Deck {
         char startPosition = move[0];
         char endPosition = move[1];
         int nCards;
+        int score = 0;
 
         // try/catch to allow for move[2] index to be nonexistent
         try{
@@ -154,7 +157,6 @@ public class Board extends Deck {
 
         // if we reach this point...move is legal, go ahead with flipping previous card, and adding card to pile
 
-
         // need to check if there IS a card before this one, i.e., thisCard is not the first card in the deck, otherwise there's no 'next' card to flip over
         if(startPile.indexOf(theseCards.get(0)) != 0){
             startPile.getCard(startPile.getSize()-(nCards+1)).setIsFaceDown(false); // flip the next card
@@ -166,7 +168,44 @@ public class Board extends Deck {
             return 0;
         }
 
-        return 0;
+        // at this point, determine the type of move made
+        // can do this by comparing the start and destination piles
+        List<Character> foundationLabels = Arrays.asList('D', 'H', 'C', 'S');
+        int startLane = Character.getNumericValue(startPosition);
+
+        //Pile (P) to suit (D/H/C/S) -> 10 points
+        if(startPosition == 'P'){
+            if(foundationLabels.contains(endPosition)){
+                score += 10;
+            }
+        }
+        else{
+            // if startPosition character is between 1 and 9 inclusive, Character.getNumericValue() will return int 1-9
+            // otherwise, the value returned will be 10 or higher
+            if(startLane > 0 && startLane < 10){
+                // Lane (1-7) to suit (D/H/C/S) -> 20 points
+                if(foundationLabels.contains(endPosition)){
+                    score += 20;
+                }
+                // Lane (1-7) to Lane (1-7) -> 5 points
+                else if(Character.getNumericValue(endPosition) > 0 && Character.getNumericValue(endPosition) < 10){
+                    score += 5;
+                }
+            }
+        }
+
+        // *Points are awarded if a specific combination of cards is moved to a pile for the first time*
+        if(isUniqueCombination(theseCards, endPile)){
+            endPile.addUniqueCardCombination(theseCards);
+        }
+        // if this combination has been seen before, don't increment the score
+        else{
+            System.out.println("You've created this combination already. No points for that!");
+            return 0;
+        }
+
+        // If user moved 2/3 cards, double or triple their points
+        return score * nCards;
     }
 
 
