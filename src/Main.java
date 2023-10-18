@@ -66,7 +66,13 @@ public class Main {
                     System.out.println("\nDrawn cards:");
                     for (Deck.Card c : drawnCards.getCards()) {
                         if (c != null) {
-                            System.out.print(c.getRank() + " of " + c.getSuit() + " " + c.getIcon() + ", ");
+                            if(drawnCards.getCards().indexOf(c) == drawnCards.getSize()-1){
+                                System.out.print(c.getRank() + " of " + c.getSuit() + " " + c.getIcon());
+                            }
+                            else{
+                                System.out.print(c.getRank() + " of " + c.getSuit() + " " + c.getIcon() + ", ");
+                            }
+
                         }
                     }
                     System.out.println();

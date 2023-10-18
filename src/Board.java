@@ -217,10 +217,16 @@ public class Board extends Deck {
         System.out.println("\nFoundation piles:\n");
 
         for(Pile p: this.foundation){
-            System.out.println(p.getLabel() + ":");
+            System.out.println("\n" + p.getLabel() + ":");
             for(Card card: p.getCards()){
-                System.out.print(card.getRank() + " of " + card.getSuit() + " " + card.getIcon() + ", ");
+                if(p.getCards().indexOf(card) == p.getSize()-1){
+                    System.out.print(card.getRank() + " of " + card.getSuit() + " " + card.getIcon());
+                }
+                else{
+                    System.out.print(card.getRank() + " of " + card.getSuit() + " " + card.getIcon() + ", ");
+                }
             }
+            System.out.println();
         }
     }
 }

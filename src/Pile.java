@@ -26,7 +26,7 @@ public class Pile {
         return c;
     }
 
-    // In some cases, we want to enforce a specific suit for a pile
+    // In some cases, we want to enforce a specific suit for the first card in a pile
     // i.e, in our foundation piles
     Deck.Suit getRequiredSuit(Deck.Suit s){
         // If the label is not D/H/C/S, it's one of the lanes
@@ -43,46 +43,63 @@ public class Pile {
     }
 
     boolean addCard(Deck.Card c) {
-        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+        if(this.cards.isEmpty()){
+            Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
-        if(c.getSuit() == requiredSuit){
-            this.cards.add(c);
+            if(c.getSuit() == requiredSuit){
+                this.cards.add(c);
+            }
+            else{
+                printIllegalSuit(requiredSuit.toString());
+                return false;
+            }
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            this.cards.add(c);
         }
         return true;
     }
 
     boolean addCard(int i, Deck.Card c) {
-        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+        if(i == 0){
+            Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
-        if(c.getSuit() == requiredSuit){
-            this.cards.add(i, c);
+            if(c.getSuit() == requiredSuit){
+                this.cards.add(i, c);
+            }
+            else{
+                printIllegalSuit(requiredSuit.toString());
+                return false;
+            }
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            this.cards.add(i, c);
         }
+
         return true;
     }
 
     void printIllegalSuit(String requiredSuit){
-        System.out.println("Illegal move! Foundation pile " + this.label + " must begin with a card of suit " + requiredSuit + "!");
+        System.out.println("Illegal move! Pile " + this.label + " must begin with a card of suit " + requiredSuit + "!");
     }
 
 
     boolean addMultiple(ArrayList<Deck.Card> cards) {
-        Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
+        if(this.cards.isEmpty()){
+            Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
 
-        if(cards.get(0).getSuit() == requiredSuit){
-            this.cards.addAll(cards);
+            if(cards.get(0).getSuit() == requiredSuit){
+                this.cards.addAll(cards);
+            }
+            else{
+                printIllegalSuit(requiredSuit.toString());
+                return false;
+            }
         }
         else{
-            printIllegalSuit(requiredSuit.toString());
-            return false;
+            this.cards.addAll(cards);
         }
+
         return true;
     }
 
