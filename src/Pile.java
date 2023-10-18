@@ -43,61 +43,47 @@ public class Pile {
     }
 
     boolean addCard(Deck.Card c) {
-        if(this.cards.isEmpty()){
-            Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
-            if(c.getSuit() == requiredSuit){
-                this.cards.add(c);
-            }
-            else{
-                printIllegalSuit(requiredSuit.toString());
-                return false;
-            }
-        }
-        else{
+        if(c.getSuit() == requiredSuit){
             this.cards.add(c);
         }
+        else{
+            printIllegalSuit(requiredSuit.toString());
+            return false;
+        }
+
         return true;
     }
 
     boolean addCard(int i, Deck.Card c) {
-        if(i == 0){
-            Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
+        Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
-            if(c.getSuit() == requiredSuit){
-                this.cards.add(i, c);
-            }
-            else{
-                printIllegalSuit(requiredSuit.toString());
-                return false;
-            }
+        if(c.getSuit() == requiredSuit){
+            this.cards.add(i, c);
         }
         else{
-            this.cards.add(i, c);
+            printIllegalSuit(requiredSuit.toString());
+            return false;
         }
 
         return true;
     }
 
     void printIllegalSuit(String requiredSuit){
-        System.out.println("Illegal move! Pile " + this.label + " must begin with a card of suit " + requiredSuit + "!");
+        System.out.println("Illegal move! Foundation pile " + this.label + " must consist only of cards with suit " + requiredSuit + "!");
     }
 
 
     boolean addMultiple(ArrayList<Deck.Card> cards) {
-        if(this.cards.isEmpty()){
-            Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
+        Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
 
-            if(cards.get(0).getSuit() == requiredSuit){
-                this.cards.addAll(cards);
-            }
-            else{
-                printIllegalSuit(requiredSuit.toString());
-                return false;
-            }
+        if(cards.get(0).getSuit() == requiredSuit){
+            this.cards.addAll(cards);
         }
         else{
-            this.cards.addAll(cards);
+            printIllegalSuit(requiredSuit.toString());
+            return false;
         }
 
         return true;
@@ -216,11 +202,24 @@ public class Pile {
                         }
 
 
-                        if (previousCardColor == color) {
-                            // Display the opposite colour to the one used as the appropriate value
-                            String s = Objects.equals(color.toString(), "RED") ? "BLACK" : "RED";
-                            System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + s + " card!");
-                            return false;
+                        // In the foundations, the suits must all match
+                        if(Arrays.asList(foundationLabels).contains(destinationPile.getLabel())){
+                         if(!destinationPile.isEmpty()){
+                             if(previousSuit != card.getSuit()){
+                                 System.out.println("Invalid move! Foundation piles must contain cards matching their respective suit.");
+                                 return false;
+                             }
+                         }
+                        }
+
+                        // In the lanes, the colours must alternate between red and black
+                        if(Arrays.asList(laneLabels).contains(destinationPile.getLabel())){
+                            if (previousCardColor == color) {
+                                // Display the opposite colour to the one used as the appropriate value
+                                String s = Objects.equals(color.toString(), "RED") ? "BLACK" : "RED";
+                                System.out.println("Invalid move! A " + previousCardColor + " card must be followed by a " + s + " card!");
+                                return false;
+                            }
                         }
 
                         return true;

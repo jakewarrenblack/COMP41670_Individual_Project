@@ -1,29 +1,29 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    private static Deck deck;
+    private static Scanner s;
+    private static Board board;
+    private enum GameState {ACTIVE, QUIT, WON}
+    private static GameState gameState;
+    private static int score;
+
     public static void main(String[] args) {
-        printTextFile("./logo.txt");
-        System.out.println("Type ? for rules");
+        init();
 
-        Deck deck = new Deck();
-        Scanner s = new Scanner(System.in);
+        if(gameWon(board)){
+            gameState = GameState.WON;
 
-        // Populate the 7 lanes and remove those cards from the main deck.
-        ArrayList<Pile> lanes = deck.getLanes();
-        Board board = new Board(deck, lanes);
+            System.out.println("Congratulations! You won 🎉🥳\nP to play again:");
 
-        Pile drawnCards;
-
-        enum GameState {ACTIVE, QUIT, WON}
-
-        GameState gameState = GameState.ACTIVE;
-
-
-        printAll(deck, board);
-
-        int score = 0;
+            char[] move = s.nextLine().toUpperCase().toCharArray();
+            if(move[0] == 'P'){
+                init();
+            }
+        }
 
         while (gameState == GameState.ACTIVE) {
             System.out.println("\nMake a move:");
@@ -67,7 +67,7 @@ public class Main {
                 // otherwise, if only 1 character was provided as input, instead of 2 or 3,
                 // the only valid possible move available is 'D', to draw a card from the deck
                 if (move[0] == 'D') {
-                    drawnCards = board.drawFromDeck();
+                    Pile drawnCards = board.drawFromDeck();
                     System.out.println("\nDrawn cards:");
                     for (Deck.Card c : drawnCards.getCards()) {
                         if (c != null) {
@@ -96,6 +96,8 @@ public class Main {
                 printAll(deck, board);
                 System.out.println("\n\nSCORE: " + score);
             }
+
+            System.out.println("\nMake a move:");
         }
     }
 
@@ -117,5 +119,34 @@ public class Main {
                 System.out.println(fileReader.nextLine());
             }
         }
+    }
+
+    static boolean gameWon(Board b){
+        ArrayList<Pile> foundation = b.getFoundation();
+
+        // If all 4 foundation piles contain 13 cards, the game has been won
+        for(Pile p: foundation){
+            if(p.getSize() != 13){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static void init(){
+        printTextFile("./logo.txt");
+        System.out.println("Type ? for rules");
+
+        deck = new Deck();
+        s = new Scanner(System.in);
+
+        // Populate the 7 lanes and remove those cards from the main deck.
+        ArrayList<Pile> lanes = deck.getLanes();
+        board = new Board(deck, lanes);
+        gameState = GameState.ACTIVE;
+
+        printAll(deck, board);
+
+        score = 0;
     }
 }

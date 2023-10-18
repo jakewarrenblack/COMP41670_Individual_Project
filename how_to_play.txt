@@ -25,8 +25,7 @@
 | Cards in the foundations must be in order:                                                                              |  |
 | - ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING                                          |  |
 |                                                                                                                         |  |
-| The first card in each foundation must also have a suit corresponding to the foundation's label. (E.g H = HEARTS)       |  |
-|                                                                                                                         |  |
+| The cards in each foundation must only contain cards matching the foundation's label. (E.g H = HEARTS)                  |  |
 |                                                                                                                         |  |
 | - A black card (spades, clubs) may only be placed above a red card (diamonds, hearts), and vice-versa.                  |  |
 | - The deck of 52 cards has been dealt into 7 piles. Pile 1 contains 1 card, pile 2 contains 2, and so on, up to pile 7. |  |

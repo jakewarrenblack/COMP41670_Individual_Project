@@ -10,6 +10,15 @@ public class Board extends Deck {
     // the set allows us to use the concise .contains method, which is why I've opted for it
     private static final Set<Character> VALID_MOVES = Set.of('1', '2', '3', '4', '5', '6', '7', 'D', 'H', 'C', 'S', 'P');
 
+    // For testing:
+    //    ArrayList<Card> generateDummyCards(Suit s){
+    //        ArrayList<Card> dummyCards = new ArrayList<>();
+    //        for(int i=0; i<13; i++){
+    //            dummyCards.add(new Card(s, Rank.FIVE, false));
+    //        }
+    //        return dummyCards;
+    //    }
+
     // these will be empty initially, unless there are aces in our initial tableau, since they should be placed in the foundation piles first anyway
     Board(Deck d, ArrayList<Pile> lanes){
         // The remaining cards after dealing out the cards for the lanes (24 of them).
