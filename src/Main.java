@@ -1,7 +1,5 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -32,9 +30,15 @@ public class Main {
             char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean scoreIncreased = false;
 
+            if(move.length == 0){
+                System.out.println("Invalid input! Please enter a move.");
+                continue;
+            }
+
             if (move.length == 2) {
                 if(move[0] == 'P' && move[1] == 'R'){
                     printAll(deck, board);
+                    continue;
                 }
                 else{
                     int attempt = board.moveCard(move[0], move[1]);
@@ -57,6 +61,7 @@ public class Main {
 
                 if(move[0] == '?'){
                     printTextFile("./how_to_play.txt");
+                    continue;
                 }
 
                 // otherwise, if only 1 character was provided as input, instead of 2 or 3,
@@ -79,9 +84,10 @@ public class Main {
                 } else if (move.length == 1 && move[0] == 'Q') {
                     System.out.println("Goodbye");
                     gameState = GameState.QUIT;
-                } else {
-                    // FIXME: Still prints this when running PR or ?
-                    System.out.println("Illegal move! That move is invalid.");
+                }
+                else{
+                    System.out.println("Invalid move!");
+                    continue;
                 }
             }
 
