@@ -177,8 +177,8 @@ public class Pile {
                 // we expect the card after this one to be the same rank as our relevant card
                 // if it isn't, this move is invalid
                 if (Objects.equals(relevantOrder[i], precedingCard.getRank().toString())) {
-                    if (!Objects.equals(relevantOrder[i + 1], rank.toString())) {
-                        System.out.println("Invalid move! Card of rank: " + rank + " may not be followed by " + relevantOrder[i]);
+                    if (!Objects.equals(relevantOrder[i+1], rank.toString())) {
+                        System.out.println("Invalid move! Card of rank: " + relevantOrder[i] + " may not be followed by " +  rank);
                         return false;
                     } else {
                         // means the combination of (card before our card) + (our card) is valid for our destination pile.

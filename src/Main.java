@@ -14,18 +14,17 @@ public class Main {
     public static void main(String[] args) {
         init();
 
-        if(gameWon(board)){
-            gameState = GameState.WON;
-
-            System.out.println("Congratulations! You won 🎉🥳\nP to play again:");
-
-            char[] move = s.nextLine().toUpperCase().toCharArray();
-            if(move[0] == 'P'){
-                init();
-            }
-        }
-
         while (gameState == GameState.ACTIVE) {
+            if(gameWon(board)){
+                gameState = GameState.WON;
+
+                System.out.println("Congratulations! You won 🎉🥳\nP to play again:");
+
+                char[] move = s.nextLine().toUpperCase().toCharArray();
+                if(move[0] == 'P'){
+                    init();
+                }
+            }
 
             char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean scoreIncreased = false;
@@ -89,9 +88,12 @@ public class Main {
                     gameState = GameState.QUIT;
                 }
                 else{
-                    System.out.println("Invalid move!");
-                    System.out.println("Make a move:");
-                    continue;
+                    if(!scoreIncreased){
+                        System.out.println("Invalid move!");
+                        System.out.println("Make a move:");
+                        continue;
+                    }
+
                 }
             }
 
@@ -148,6 +150,8 @@ public class Main {
         }
         return true;
     }
+
+
 
     public static void init(){
         printTextFile("res/logo.txt");

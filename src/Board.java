@@ -159,9 +159,12 @@ public class Board extends Deck {
         }
 
         for(Card c: theseCards){
-            if(!endPile.validateOrder(c, tempPile)){
-                return 0;
+            if(!endPile.validateOrder(theseCards.get(0), tempPile)){
+              return 0;
             }
+//            if(!endPile.validateOrder(c, tempPile)){
+//                return 0;
+//            }
             c.setIsFaceDown(false);
         }
 
