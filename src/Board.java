@@ -1,25 +1,16 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Board extends Deck {
     private final Pile deck;
     private final ArrayList<Pile> lanes;
-    private final ArrayList<Pile> foundation = new ArrayList<>(4);
+    private ArrayList<Pile> foundation = new ArrayList<>(4);
     private final Pile drawnFromDeck = new Pile('P', new ArrayList<>(3));
 
     // wrapper class needed here, this doesn't support `char`
     // the set allows us to use the concise .contains method, which is why I've opted for it
     private static final Set<Character> VALID_MOVES = Set.of('1', '2', '3', '4', '5', '6', '7', 'D', 'H', 'C', 'S', 'P');
 
-    // For testing:
-    //    ArrayList<Card> generateDummyCards(Suit s){
-    //        ArrayList<Card> dummyCards = new ArrayList<>();
-    //        for(int i=0; i<13; i++){
-    //            dummyCards.add(new Card(s, Rank.FIVE, false));
-    //        }
-    //        return dummyCards;
-    //    }
-
-    // these will be empty initially, unless there are aces in our initial tableau, since they should be placed in the foundation piles first anyway
     Board(Deck d, ArrayList<Pile> lanes){
         // The remaining cards after dealing out the cards for the lanes (24 of them).
         this.deck = d.getDeck();
@@ -34,6 +25,14 @@ public class Board extends Deck {
         this.foundation.add(2, new Pile('C', new ArrayList<>()));
         // spades
         this.foundation.add(3, new Pile('S', new ArrayList<>()));
+    }
+
+    // Constructor for creating a custom deck for testing
+    Board(Deck d, ArrayList<Pile> lanes, ArrayList<Pile> customFoundation) {
+        this.deck = d.getDeck();
+        this.lanes = lanes;
+
+        this.foundation = customFoundation;
     }
 
     boolean validateMove(char startPosition, char endPosition){

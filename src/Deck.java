@@ -50,10 +50,10 @@ Deck {
             String icon = null;
 
             switch(this.suit){
-                case SPADES -> icon = "♠️";
-                case HEARTS -> icon = "♥️";
-                case CLUBS -> icon = "♣️";
-                case DIAMONDS -> icon = "♦️";
+                case SPADES -> icon = "\u2660";
+                case HEARTS -> icon = "\u2665";
+                case CLUBS -> icon = "\u2663";
+                case DIAMONDS -> icon = "\u2666";
             }
 
             return icon;
@@ -139,25 +139,6 @@ Deck {
             Card lastCard = pile.getCard(pile.getSize() -1);
             lastCard.setIsFaceDown(false);
         }
-
-        // This provides a specific card setup for testing/demonstrating the movement of multiple cards at once
-        //                ArrayList<Deck.Card> firstCard = new ArrayList<>();
-        //                firstCard.add(new Card(Suit.HEARTS, Rank.ACE, false));
-        //
-        //                ArrayList<Deck.Card> secondCard = new ArrayList<>();
-        //                secondCard.add(new Card(Suit.SPADES, Rank.TWO, false));
-        //
-        //                ArrayList<Deck.Card> thirdCard = new ArrayList<>();
-        //                thirdCard.add(new Card(Suit.DIAMONDS, Rank.FOUR, false));
-        //
-        //                // testing move multiple cards, then move one card from the top to another pile
-        //                ArrayList<Deck.Card> fourthCard = new ArrayList<>();
-        //                fourthCard.add(new Card(Suit.CLUBS, Rank.THREE, false));
-        //
-        //                piles.set(0, new Pile(1, firstCard));
-        //                piles.set(1, new Pile(2, secondCard));
-        //                piles.set(2, new Pile(3, thirdCard));
-        //                piles.set(3, new Pile(4, fourthCard));
 
 
         this.lanes = piles;

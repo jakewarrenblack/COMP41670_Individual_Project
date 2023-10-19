@@ -7,7 +7,7 @@ public class Main {
     private static Deck deck;
     private static Scanner s;
     private static Board board;
-    private enum GameState {ACTIVE, QUIT, WON}
+    enum GameState {ACTIVE, QUIT, WON}
     private static GameState gameState;
     private static int score;
 
@@ -133,7 +133,7 @@ public class Main {
         return true;
     }
 
-    static void init(){
+    public static void init(){
         printTextFile("./logo.txt");
         System.out.println("Type ? for rules");
 

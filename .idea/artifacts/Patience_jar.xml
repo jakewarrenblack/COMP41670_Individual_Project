@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="Patience:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Patience_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Patience.jar">
+        <element id="module-output" name="Patience" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/how_to_play.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/logo.txt" />
+      <element id="module-output" name="Patience" />
+    </root>
+  </artifact>
+</component>
