@@ -9,6 +9,7 @@ public class Main {
     enum GameState {ACTIVE, QUIT, WON}
     private static GameState gameState;
     private static int score;
+    private static int moveCount;
 
     public static void main(String[] args) {
         init();
@@ -43,6 +44,7 @@ public class Main {
                     int attempt = board.moveCard(move[0], move[1]);
                     if(attempt != 0){
                         score += attempt;
+                        moveCount++;
                         scoreIncreased = true;
                     }
                 }
@@ -53,6 +55,7 @@ public class Main {
                     int attempt = board.moveCard(move[0], move[1], move[2]);
                     if(attempt != 0){
                         score += attempt;
+                        moveCount++;
                         scoreIncreased = true;
                     }
                 }
@@ -93,7 +96,14 @@ public class Main {
             if(scoreIncreased){
                 // Print the deck again after a valid move, so the player can see their changes
                 printAll(deck, board);
-                System.out.println("\n\nSCORE: " + score);
+
+                if(moveCount == 1){
+                    System.out.println("\n\nSCORE: " + score + " / " + moveCount + " moves so far");
+                }
+                else{
+                    System.out.println("\n\nSCORE: " + score + " / " + moveCount + " move so far");
+                }
+
             }
 
             System.out.println("\nMake a move:");
@@ -147,5 +157,6 @@ public class Main {
         printAll(deck, board);
 
         score = 0;
+        moveCount = 0;
     }
 }
