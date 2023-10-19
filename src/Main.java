@@ -26,7 +26,7 @@ public class Main {
         }
 
         while (gameState == GameState.ACTIVE) {
-            System.out.println("\nMake a move:");
+
             char[] move = s.nextLine().toUpperCase().toCharArray();
             boolean scoreIncreased = false;
 
@@ -104,7 +104,9 @@ public class Main {
                     System.out.println("\n\nSCORE: " + score + " / " + moveCount + " move so far");
                 }
             }
+
             System.out.println("\nMake a move:");
+
         }
     }
 
@@ -156,5 +158,7 @@ public class Main {
 
         score = 0;
         moveCount = 0;
+
+        System.out.println("\nMake a move:");
     }
 }
