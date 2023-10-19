@@ -67,7 +67,7 @@ public class Board extends Deck {
         }
         
     }
-    private static int lastIndexReplaced = 0;
+    private static int lastIndexReplaced = 2;
 
     // Draw cards from the leftover deck and replace them cyclically
     // Max of 3 drawn at one time
@@ -82,15 +82,17 @@ public class Board extends Deck {
             this.drawnFromDeck.addCard(this.drawnFromDeck.getSize(), this.deck.removeCard(this.deck.getSize()-1));
         }
         else{
-            this.drawnFromDeck.removeCard(lastIndexReplaced);
-            this.drawnFromDeck.addCard(lastIndexReplaced, this.deck.removeCard(this.deck.getSize()-1));
+            // remove card at index 2, and shift cards 1, 2 back one position
 
-            if(lastIndexReplaced == 2){
-                lastIndexReplaced = 0;
-            }
-            else{
-                lastIndexReplaced++;
-            }
+            // move EXISTING card 1 to position 0
+            this.drawnFromDeck.addCard(0, this.drawnFromDeck.removeCard(1));
+
+            // move EXISTING card 2 to position 1
+             this.drawnFromDeck.addCard(1, this.drawnFromDeck.removeCard(2));
+
+            // replace card at index 2 with a NEW card
+            this.drawnFromDeck.removeCard(2);
+            this.drawnFromDeck.addCard(2, this.deck.removeCard(this.deck.getSize()-1));
         }
 
     return this.drawnFromDeck;
