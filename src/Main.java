@@ -60,19 +60,6 @@ public class Main {
                     }
                 }
 
-                if(scoreIncreased){
-                    // Print the deck again after a valid move, so the player can see their changes
-                    printAll(deck, board);
-
-                    if(moveCount == 1){
-                        System.out.println("\n\nSCORE: " + score + " / " + moveCount + " moves so far");
-                    }
-                    else{
-                        System.out.println("\n\nSCORE: " + score + " / " + moveCount + " move so far");
-                    }
-                    System.out.println("Make a move:");
-                    continue;
-                }
 
 
                 if(move[0] == '?'){
@@ -107,6 +94,21 @@ public class Main {
                     continue;
                 }
             }
+
+            if(scoreIncreased){
+                // Print the deck again after a valid move, so the player can see their changes
+                printAll(deck, board);
+
+                if(moveCount == 1){
+                    System.out.println("\n\nSCORE: " + score + " / " + moveCount + " moves so far");
+                }
+                else{
+                    System.out.println("\n\nSCORE: " + score + " / " + moveCount + " move so far");
+                }
+                System.out.println("Make a move:");
+                continue;
+            }
+
 
 
 
