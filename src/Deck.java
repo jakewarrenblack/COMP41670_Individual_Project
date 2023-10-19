@@ -3,17 +3,13 @@ import java.util.Collections;
 
 public class
 Deck {
-    Pile spades = new Pile('S', new ArrayList<>(13));
-    Pile clubs = new Pile('C', new ArrayList<>(13));
-    Pile diamonds = new Pile('D', new ArrayList<>(13));
-    Pile hearts = new Pile('H', new ArrayList<>(13));
-    ArrayList<Card> deck = new ArrayList<>();
+    private final ArrayList<Card> deck = new ArrayList<>();
 
     private ArrayList<Pile> lanes;
 
-    enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS}
+    public enum Suit {SPADES, HEARTS, CLUBS, DIAMONDS}
 
-    enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
+    public enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
 
     public static class Card{
         // suits: there are 13 of each type, 52 in total (spades, diamonds, hearts, clubs)
@@ -60,21 +56,25 @@ Deck {
         }
     }
 
-    Deck(){
+   public Deck(){
 
-        for(int i=0; i<13; i++){
+       Pile spades = new Pile('S', new ArrayList<>(13));
+       Pile clubs = new Pile('C', new ArrayList<>(13));
+       Pile diamonds = new Pile('D', new ArrayList<>(13));
+       Pile hearts = new Pile('H', new ArrayList<>(13));
+       for(int i = 0; i<13; i++){
             // so 13 of each = 52 total cards
-            this.clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
-            this.spades.addCard(new Card(Suit.SPADES, Rank.values()[i], true));
-            this.hearts.addCard(new Card(Suit.HEARTS, Rank.values()[i], true));
-            this.diamonds.addCard(new Card(Suit.DIAMONDS, Rank.values()[i], true));
+            clubs.addCard(new Card(Suit.CLUBS, Rank.values()[i], true));
+            spades.addCard(new Card(Suit.SPADES, Rank.values()[i], true));
+            hearts.addCard(new Card(Suit.HEARTS, Rank.values()[i], true));
+            diamonds.addCard(new Card(Suit.DIAMONDS, Rank.values()[i], true));
         }
 
         // I now want to combine these suits in to 52 total cards
-        this.deck.addAll(this.clubs.getCards());
-        this.deck.addAll(this.spades.getCards());
-        this.deck.addAll(this.hearts.getCards());
-        this.deck.addAll(this.diamonds.getCards());
+        this.deck.addAll(clubs.getCards());
+        this.deck.addAll(spades.getCards());
+        this.deck.addAll(hearts.getCards());
+        this.deck.addAll(diamonds.getCards());
 
         this.createLanes();
     }
@@ -84,15 +84,7 @@ Deck {
         return new Pile('P', this.deck);
     }
 
-    void printDeck(){
-        for(Card c: this.deck){
-            System.out.println(c.getRank() + " of " + c.getSuit());
-        }
-    }
-
-
-
-    void printLanes(){
+    public void printLanes(){
         for(Pile pile: this.lanes){
             System.out.println("\n" + pile.getLabel() + ":");
             for(Card c: pile.getCards()){
@@ -114,7 +106,7 @@ Deck {
     /*
     * Shuffles the cards, populates the 7 lanes, and removes those cards from the overall deck.
     */
-    void createLanes(){
+   public void createLanes(){
         Collections.shuffle(this.deck);
 
         // will be a list containing arrays of cards of varying size, our piles
@@ -144,7 +136,7 @@ Deck {
         this.lanes = piles;
     }
 
-    ArrayList<Pile> getLanes(){
+    public ArrayList<Pile> getLanes(){
         return this.lanes;
     }
 }

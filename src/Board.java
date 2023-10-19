@@ -11,7 +11,7 @@ public class Board extends Deck {
     // the set allows us to use the concise .contains method, which is why I've opted for it
     private static final Set<Character> VALID_MOVES = Set.of('1', '2', '3', '4', '5', '6', '7', 'D', 'H', 'C', 'S', 'P');
 
-    Board(Deck d, ArrayList<Pile> lanes){
+    public Board(Deck d, ArrayList<Pile> lanes){
         // The remaining cards after dealing out the cards for the lanes (24 of them).
         this.deck = d.getDeck();
         this.lanes = lanes;
@@ -28,20 +28,20 @@ public class Board extends Deck {
     }
 
     // Constructor for creating a custom deck for testing
-    Board(Deck d, ArrayList<Pile> lanes, ArrayList<Pile> customFoundation) {
+    public Board(Deck d, ArrayList<Pile> lanes, ArrayList<Pile> customFoundation) {
         this.deck = d.getDeck();
         this.lanes = lanes;
 
         this.foundation = customFoundation;
     }
 
-    boolean validateMove(char startPosition, char endPosition){
+    private boolean validateMove(char startPosition, char endPosition){
         // Immediately make sure that both chars actually relate to one of our card piles
         return VALID_MOVES.contains(startPosition) && VALID_MOVES.contains(endPosition);
     }
 
 
-    Pile findPile(char label){
+    private Pile findPile(char label){
         if(label == 'P'){
             // it's the remaining card pile, then
             //return new Pile('P', new ArrayList<>(List.of(this.drawnFromDeck)));
@@ -72,7 +72,7 @@ public class Board extends Deck {
     // Draw cards from the leftover deck and replace them cyclically
     // Max of 3 drawn at one time
     // so, draw 1..2..3, then replace 1..2..3
-    Pile drawFromDeck(){
+    public Pile drawFromDeck(){
         if(this.deck.getSize() == 0){
             System.out.println("Deck is empty!");
             return new Pile('P', new ArrayList<>());
@@ -105,7 +105,7 @@ public class Board extends Deck {
     /*
     * Return true if move is legal
      */
-    int moveCard(char...move){
+    public int moveCard(char...move){
         // e.g. move = '7D' -> move NINE of HEARTS out of lane 7 and into foundation pile D
         char startPosition = move[0];
         char endPosition = move[1];
@@ -217,11 +217,11 @@ public class Board extends Deck {
     }
 
 
-    ArrayList<Pile> getFoundation(){
+    public ArrayList<Pile> getFoundation(){
         return this.foundation;
     }
 
-    void printFoundation(){
+    public void printFoundation(){
         System.out.println("\nFoundation piles:\n");
 
         for(Pile p: this.foundation){

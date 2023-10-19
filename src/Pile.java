@@ -4,31 +4,30 @@ import java.util.*;
 public class Pile {
     private final char label;
     private final ArrayList<Deck.Card> cards;
+    private final Set<ArrayList<Deck.Card>> uniqueCardCombinations = new HashSet<>();
 
-    private Set<ArrayList<Deck.Card>> uniqueCardCombinations = new HashSet<>();
-
-    Pile(char l, ArrayList<Deck.Card> c) {
+   public Pile(char l, ArrayList<Deck.Card> c) {
         this.label = l;
         this.cards = c;
     }
 
-    Pile(int l, ArrayList<Deck.Card> c) {
+    public Pile(int l, ArrayList<Deck.Card> c) {
         this.label = Character.forDigit(l, 10); // 10 represents numeral system, so use digital. it'd print an ASCII code if we tried to just cast via (char)i.
         this.cards = c;
     }
 
-    ArrayList<Deck.Card> getCards() {
+    public ArrayList<Deck.Card> getCards() {
         return this.cards;
     }
 
-    Deck.Card removeCard(Deck.Card c) {
+    public Deck.Card removeCard(Deck.Card c) {
         this.cards.remove(c);
         return c;
     }
 
     // In some cases, we want to enforce a specific suit for the first card in a pile
     // i.e, in our foundation piles
-    Deck.Suit getRequiredSuit(Deck.Suit s){
+    private Deck.Suit getRequiredSuit(Deck.Suit s){
         // If the label is not D/H/C/S, it's one of the lanes
         // so in that case, just allow the card to be added, as there's no specific suit requirement
         Deck.Suit requiredSuit = s;
@@ -42,7 +41,7 @@ public class Pile {
         return requiredSuit;
     }
 
-    boolean addCard(Deck.Card c) {
+    public boolean addCard(Deck.Card c) {
         Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
         if(c.getSuit() == requiredSuit){
@@ -56,7 +55,7 @@ public class Pile {
         return true;
     }
 
-    boolean addCard(int i, Deck.Card c) {
+    public boolean addCard(int i, Deck.Card c) {
         Deck.Suit requiredSuit = this.getRequiredSuit(c.getSuit());
 
         if(c.getSuit() == requiredSuit){
@@ -70,12 +69,12 @@ public class Pile {
         return true;
     }
 
-    void printIllegalSuit(String requiredSuit){
+    private void printIllegalSuit(String requiredSuit){
         System.out.println("Illegal move! Foundation pile " + this.label + " must consist only of cards with suit " + requiredSuit + "!");
     }
 
 
-    boolean addMultiple(ArrayList<Deck.Card> cards) {
+    public boolean addMultiple(ArrayList<Deck.Card> cards) {
         Deck.Suit requiredSuit = this.getRequiredSuit(cards.get(0).getSuit());
 
         if(cards.get(0).getSuit() == requiredSuit){
@@ -89,11 +88,11 @@ public class Pile {
         return true;
     }
 
-    boolean removeMultiple(ArrayList<Deck.Card> cards) {
+    public boolean removeMultiple(ArrayList<Deck.Card> cards) {
         return this.cards.removeAll(cards);
     }
 
-    Deck.Card getCard(int i) {
+    public Deck.Card getCard(int i) {
         try {
             return this.cards.get(i);
         } catch (Exception ex) {
@@ -101,16 +100,16 @@ public class Pile {
         }
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return this.cards.isEmpty();
     }
 
     // Returns the element which was removed from the list
-    Deck.Card removeCard(int i) {
+    public Deck.Card removeCard(int i) {
         return this.cards.remove(i);
     }
 
-    int getSize() {
+    public int getSize() {
         return this.cards.size();
     }
 
@@ -118,7 +117,7 @@ public class Pile {
         return this.cards.indexOf(c);
     }
 
-    char getLabel() {
+    public char getLabel() {
         return this.label;
     }
 
@@ -151,13 +150,10 @@ public class Pile {
     // if there's a card preceding the card you're trying to place, check if A followed by B is valid
     // if there's no other card preceding it, if the card is being placed in the foundation array, it needs to be an ACE
     // if the card is being placed in one of the lanes/tableau, it needs to be a KING (reverse of the foundation order)
-    boolean validateOrder(Deck.Card card, Pile destinationPile) {
-        // if only one card was passed, this whole validation process goes ahead as normal
-
+    public boolean validateOrder(Deck.Card card, Pile destinationPile) {
         String[] relevantOrder = Arrays.asList(foundationLabels).contains(destinationPile.label) ? foundationOrder : laneOrder;
 
         Deck.Rank rank = card.getRank();
-
         enum Color {RED, BLACK};
         Color color;
 
@@ -189,7 +185,6 @@ public class Pile {
 
                         // now need to check the colour combination
                         // a red card should be followed by a black card, and vice-versa
-
                         Color previousCardColor;
 
                         Deck.Suit previousSuit = precedingCard.getSuit();
@@ -221,7 +216,6 @@ public class Pile {
                                 return false;
                             }
                         }
-
                         return true;
                     }
                 }

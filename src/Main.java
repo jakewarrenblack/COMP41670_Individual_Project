@@ -103,9 +103,7 @@ public class Main {
                 else{
                     System.out.println("\n\nSCORE: " + score + " / " + moveCount + " move so far");
                 }
-
             }
-
             System.out.println("\nMake a move:");
         }
     }
