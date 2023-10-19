@@ -1,6 +1,5 @@
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -60,7 +59,7 @@ public class Main {
 
 
                 if(move[0] == '?'){
-                    printTextFile("./how_to_play.txt");
+                    printTextFile("res/how_to_play.txt");
                     continue;
                 }
 
@@ -106,18 +105,18 @@ public class Main {
         b.printFoundation();
     }
 
-    static void printTextFile(String filePath){
-        Scanner fileReader = null;
-        try {
-            fileReader = new Scanner(new File(filePath));
-        } catch (Exception e) {
-            System.out.println("Error reading file: " + e);
-        }
-
-        if(fileReader != null){
-            while (fileReader.hasNextLine()) {
-                System.out.println(fileReader.nextLine());
+    static void printTextFile(String filePath) {
+        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream != null) {
+            try (Scanner scanner = new Scanner(inputStream)) {
+                while (scanner.hasNextLine()) {
+                    System.out.println(scanner.nextLine());
+                }
+            } catch (Exception e) {
+                System.out.println("Error reading file: " + e);
             }
+        } else {
+            System.out.println("File not found: " + filePath);
         }
     }
 
@@ -134,7 +133,7 @@ public class Main {
     }
 
     public static void init(){
-        printTextFile("./logo.txt");
+        printTextFile("res/logo.txt");
         System.out.println("Type ? for rules");
 
         deck = new Deck();
