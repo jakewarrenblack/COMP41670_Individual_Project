@@ -147,37 +147,11 @@ public class Main {
         return true;
     }
 
-    static ArrayList<Pile> generateDummyLanes(){
-        ArrayList<Pile> lanes = new ArrayList<>();
-
-        ArrayList<Deck.Card> firstCard = new ArrayList<>();
-        firstCard.add(new Deck.Card(Deck.Suit.HEARTS, Deck.Rank.ACE, false));
-
-        ArrayList<Deck.Card> secondCard = new ArrayList<>();
-        secondCard.add(new Deck.Card(Deck.Suit.HEARTS, Deck.Rank.FIVE, false));
-
-        ArrayList<Deck.Card> thirdCard = new ArrayList<>();
-        thirdCard.add(new Deck.Card(Deck.Suit.DIAMONDS, Deck.Rank.THREE, false));
-
-        // testing move multiple cards, then move one card from the top to another pile
-        ArrayList<Deck.Card> fourthCard = new ArrayList<>();
-        fourthCard.add(new Deck.Card(Deck.Suit.CLUBS, Deck.Rank.FOUR, false));
-
-        lanes.add(0, new Pile(1, firstCard));
-        lanes.add(1, new Pile(2, secondCard));
-        lanes.add(2, new Pile(3, thirdCard));
-        lanes.add(3, new Pile(4, fourthCard));
-
-        return lanes;
-    }
-
     public static void init(){
         printTextFile("res/logo.txt");
         System.out.println("Type ? for rules");
 
-        ArrayList<Pile> customLanes = generateDummyLanes();
-
-        deck = new Deck(customLanes);
+        deck = new Deck();
         s = new Scanner(System.in);
 
         // Populate the 7 lanes and remove those cards from the main deck.
