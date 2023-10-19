@@ -79,6 +79,10 @@ Deck {
         this.createLanes();
     }
 
+    public Deck(ArrayList<Pile> customLanes){
+        this.lanes = customLanes;
+    }
+
     Pile getDeck(){
         // more convenient if I convert to Pile, since that has a label associated with it, which I can use to determine where the user wants to move to/from
         return new Pile('P', this.deck);
